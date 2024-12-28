@@ -26,7 +26,7 @@ public interface ReviewControllerSwagger {
     ResponseEntity<ResDTO<ReviewPostResDTOv1>> postBy(@RequestHeader("X-User-Id") Long userId, @Valid @RequestBody PostReviewReqDTOv1 dto);
 
 
-    @Operation(summary = "리뷰 수정", description = "사용자의 Id 와 식당의 Id 를 기준으로 리뷰를 수정하는 API 입니다.")
+    @Operation(summary = "리뷰 수정", description = "사용자의 Id 와 리뷰의 Id 를 기준으로 리뷰를 수정하는 API 입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 수정 성공", content = @Content(schema = @Schema(implementation = ResDTO.class))),
             @ApiResponse(responseCode = "400", description = "리뷰 수정 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
