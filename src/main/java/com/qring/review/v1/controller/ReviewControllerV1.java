@@ -2,6 +2,7 @@ package com.qring.review.v1.controller;
 
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.domain.v1.res.ResDTO;
+import com.qring.review.domain.v1.res.ReviewGetByIdResDTOv1;
 import com.qring.review.domain.v1.res.ReviewPostResDTOv1;
 import com.qring.review.domain.v1.res.ReviewSearchResDTOv1;
 import com.qring.review.infrastructure.docs.ReviewControllerSwagger;
@@ -89,6 +90,29 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
                         .code(HttpStatus.OK.value())
                         .message("리뷰 검색에 성공했습니다.")
                         .data(ReviewSearchResDTOv1.of(dummyPage))
+                        .build(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/v1/reviews/{reviewId}")
+    public ResponseEntity<ResDTO<ReviewGetByIdResDTOv1>> getBy(@PathVariable Long reviewId) {
+
+        // -----
+        // TODO : 더미데이터입니다.
+        ReviewEntity dummyReviewEntity = ReviewEntity.builder()
+                .userId(1L)
+                .restaurantId(501L)
+                .rating(5)
+                .content("정말 최고의 음식이었어요!")
+                .build();
+        // ----- 추후 삭제하시면 됩니다.
+
+        return new ResponseEntity<>(
+                ResDTO.<ReviewGetByIdResDTOv1>builder()
+                        .code(HttpStatus.OK.value())
+                        .message("리뷰 검색에 성공했습니다.")
+                        .data(ReviewGetByIdResDTOv1.of(dummyReviewEntity))
                         .build(),
                 HttpStatus.OK
         );
