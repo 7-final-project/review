@@ -4,13 +4,11 @@ import com.qring.review.domain.v1.res.ResDTO;
 import com.qring.review.domain.v1.res.ReviewPostResDTOv1;
 import com.qring.review.infrastructure.docs.ReviewControllerSwagger;
 import com.qring.review.v1.req.PostReviewReqDTOv1;
+import com.qring.review.v1.req.PutReviewReqDTOv1;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ReviewControllerV1 implements ReviewControllerSwagger {
@@ -26,6 +24,20 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
                         .data(ReviewPostResDTOv1.of(userId, 9999L, 5, "example-content"))
                         .build(),
                 HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping("/v1/reviews/{reviewId}")
+    public ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
+                                                @PathVariable Long reviewId,
+                                                @Valid @RequestBody PutReviewReqDTOv1 dto) {
+
+        return new ResponseEntity<>(
+                ResDTO.builder()
+                        .code(HttpStatus.OK.value())
+                        .message("리뷰 수정에 성공했습니다.")
+                        .build(),
+                HttpStatus.OK
         );
     }
 }
