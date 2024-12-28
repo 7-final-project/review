@@ -1,4 +1,4 @@
-package com.qring.review.domain.v1.res;
+package com.qring.review.application.v1.res;
 
 import com.qring.review.domain.model.ReviewEntity;
 import lombok.AllArgsConstructor;

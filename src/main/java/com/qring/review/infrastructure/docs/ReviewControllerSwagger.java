@@ -1,9 +1,9 @@
 package com.qring.review.infrastructure.docs;
 
-import com.qring.review.domain.v1.res.ResDTO;
-import com.qring.review.domain.v1.res.ReviewGetByIdResDTOv1;
-import com.qring.review.domain.v1.res.ReviewPostResDTOv1;
-import com.qring.review.domain.v1.res.ReviewSearchResDTOv1;
+import com.qring.review.application.v1.res.ResDTO;
+import com.qring.review.application.v1.res.ReviewGetByIdResDTOv1;
+import com.qring.review.application.v1.res.ReviewPostResDTOv1;
+import com.qring.review.application.v1.res.ReviewSearchResDTOv1;
 import com.qring.review.v1.req.PostReviewReqDTOv1;
 import com.qring.review.v1.req.PutReviewReqDTOv1;
 import io.swagger.v3.oas.annotations.Operation;
