@@ -1,13 +1,15 @@
-package com.qring.review.v1.controller;
+package com.qring.review.presentation.v1.controller;
 
-import com.qring.review.domain.model.ReviewEntity;
+
+
 import com.qring.review.application.v1.res.ResDTO;
 import com.qring.review.application.v1.res.ReviewGetByIdResDTOv1;
 import com.qring.review.application.v1.res.ReviewPostResDTOv1;
 import com.qring.review.application.v1.res.ReviewSearchResDTOv1;
+import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.infrastructure.docs.ReviewControllerSwagger;
-import com.qring.review.v1.req.PostReviewReqDTOv1;
-import com.qring.review.v1.req.PutReviewReqDTOv1;
+import com.qring.review.presentation.v1.req.PostReviewReqDTOv1;
+import com.qring.review.presentation.v1.req.PutReviewReqDTOv1;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

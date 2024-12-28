@@ -1,4 +1,4 @@
-package com.qring.review.v1.req;
+package com.qring.review.presentation.v1.req;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
