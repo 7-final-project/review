@@ -1,6 +1,7 @@
 package com.qring.review.infrastructure.docs;
 
 import com.qring.review.domain.v1.res.ResDTO;
+import com.qring.review.domain.v1.res.ReviewGetByIdResDTOv1;
 import com.qring.review.domain.v1.res.ReviewPostResDTOv1;
 import com.qring.review.domain.v1.res.ReviewSearchResDTOv1;
 import com.qring.review.v1.req.PostReviewReqDTOv1;
@@ -40,6 +41,13 @@ public interface ReviewControllerSwagger {
                                                                  @RequestParam(name = "userId", required = false) Long userId,
                                                                  @RequestParam(name = "restaurantId", required = false) Long restaurantId,
                                                                  @RequestParam(name = "sort", required = false) String sort);
+
+    @Operation(summary = "리뷰 상세 조회", description = "리뷰 ID 를 기준으로 리뷰를 상세 조회하는 API 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "리뷰 조회 성공", content = @Content(schema = @Schema(implementation = ResDTO.class))),
+            @ApiResponse(responseCode = "400", description = "리뷰 조회 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
+    })
+    ResponseEntity<ResDTO<ReviewGetByIdResDTOv1>> getBy(@PathVariable Long reviewId);
 
 
     @Operation(summary = "리뷰 수정", description = "사용자의 Id 와 리뷰의 Id 를 기준으로 리뷰를 수정하는 API 입니다.")
