@@ -33,4 +33,12 @@ public interface ReviewControllerSwagger {
     })
     @PutMapping("/v1/reviews/{reviewId}")
     ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long reviewId, @Valid @RequestBody PutReviewReqDTOv1 dto);
+
+
+    @Operation(summary = "리뷰 삭제", description = "사용자의 Id 와 리뷰 Id 를 기준으로 리뷰를 삭제하는 API 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "리뷰 삭제 성공", content = @Content(schema = @Schema(implementation = ResDTO.class))),
+            @ApiResponse(responseCode = "400", description = "리뷰 삭제 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
+    })
+    ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long reviewId);
 }
