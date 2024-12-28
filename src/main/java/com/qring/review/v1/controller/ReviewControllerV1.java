@@ -26,11 +26,21 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
     public ResponseEntity<ResDTO<ReviewPostResDTOv1>> postBy(@RequestHeader("X-User-Id") Long userId,
                                                              @Valid @RequestBody PostReviewReqDTOv1 dto) {
 
+        // -----
+        // TODO : 더미데이터입니다.
+        ReviewEntity dummyReviewEntity = ReviewEntity.builder()
+                .userId(1L)
+                .restaurantId(501L)
+                .rating(5)
+                .content("정말 최고의 음식이었어요!")
+                .build();
+        // ----- 추후 삭제하시면 됩니다.
+
         return new ResponseEntity<>(
                 ResDTO.<ReviewPostResDTOv1>builder()
                         .code(HttpStatus.CREATED.value())
                         .message("리뷰 생성에 성공했습니다.")
-                        .data(ReviewPostResDTOv1.of(userId, 9999L, 5, "example-content"))
+                        .data(ReviewPostResDTOv1.of(dummyReviewEntity))
                         .build(),
                 HttpStatus.CREATED
         );
