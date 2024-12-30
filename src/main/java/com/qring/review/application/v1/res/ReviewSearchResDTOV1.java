@@ -13,12 +13,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewSearchResDTOv1 {
+public class ReviewSearchResDTOV1 {
 
     private ReviewPage reviewPage;
 
-    public static ReviewSearchResDTOv1 of(Page<ReviewEntity> reviewEntityPage) {
-        return ReviewSearchResDTOv1.builder()
+    public static ReviewSearchResDTOV1 of(Page<ReviewEntity> reviewEntityPage) {
+        return ReviewSearchResDTOV1.builder()
                 .reviewPage(ReviewPage.from(reviewEntityPage))
                 .build();
     }

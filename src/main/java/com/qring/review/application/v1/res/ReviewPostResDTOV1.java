@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewPostResDTOv1 {
+public class ReviewPostResDTOV1 {
 
     private Review review;
 
-    public static ReviewPostResDTOv1 of(ReviewEntity reviewEntity) {
-        return ReviewPostResDTOv1.builder()
+    public static ReviewPostResDTOV1 of(ReviewEntity reviewEntity) {
+        return ReviewPostResDTOV1.builder()
                 .review(Review.from(reviewEntity))
                 .build();
     }

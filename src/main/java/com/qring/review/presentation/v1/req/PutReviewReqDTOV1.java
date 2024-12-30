@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PutReviewReqDTOv1 {
+public class PutReviewReqDTOV1 {
 
     @Valid
     @NotNull(message = "리뷰 정보를 입력해주세요.")
