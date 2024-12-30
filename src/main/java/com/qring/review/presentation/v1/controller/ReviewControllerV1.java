@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/v1/reviews")
 public class ReviewControllerV1 implements ReviewControllerSwagger {
 
-    @PostMapping("/v1/reviews")
+    @PostMapping
     public ResponseEntity<ResDTO<ReviewPostResDTOv1>> postBy(@RequestHeader("X-User-Id") Long userId,
                                                              @Valid @RequestBody PostReviewReqDTOv1 dto) {
 
@@ -49,7 +50,7 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         );
     }
 
-    @GetMapping("/v1/reviews")
+    @GetMapping
     public ResponseEntity<ResDTO<ReviewSearchResDTOv1>> searchBy(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                                                                  @RequestParam(name = "userId", required = false) Long userId,
                                                                  @RequestParam(name = "restaurantId", required = false) Long restaurantId,
@@ -97,7 +98,7 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         );
     }
 
-    @GetMapping("/v1/reviews/{reviewId}")
+    @GetMapping("/{reviewId}")
     public ResponseEntity<ResDTO<ReviewGetByIdResDTOv1>> getBy(@PathVariable Long reviewId) {
 
         // -----
@@ -120,7 +121,7 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         );
     }
 
-    @PutMapping("/v1/reviews/{reviewId}")
+    @PutMapping("/{reviewId}")
     public ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
                                                 @PathVariable Long reviewId,
                                                 @Valid @RequestBody PutReviewReqDTOv1 dto) {
@@ -134,7 +135,7 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         );
     }
 
-    @DeleteMapping("/v1/reviews/{reviewId}")
+    @DeleteMapping("/{reviewId}")
     public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long reviewId) {
 
         return new ResponseEntity<>(
