@@ -98,8 +98,8 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         );
     }
 
-    @GetMapping("/{reviewId}")
-    public ResponseEntity<ResDTO<ReviewGetByIdResDTOv1>> getBy(@PathVariable Long reviewId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ResDTO<ReviewGetByIdResDTOv1>> getBy(@PathVariable Long id) {
 
         // -----
         // TODO : 더미데이터입니다.
@@ -121,9 +121,9 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         );
     }
 
-    @PutMapping("/{reviewId}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
-                                                @PathVariable Long reviewId,
+                                                @PathVariable Long id,
                                                 @Valid @RequestBody PutReviewReqDTOv1 dto) {
 
         return new ResponseEntity<>(
@@ -135,8 +135,8 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         );
     }
 
-    @DeleteMapping("/{reviewId}")
-    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long reviewId) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id) {
 
         return new ResponseEntity<>(
                 ResDTO.builder()

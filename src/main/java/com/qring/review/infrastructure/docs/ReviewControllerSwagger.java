@@ -38,16 +38,16 @@ public interface ReviewControllerSwagger {
     })
     @GetMapping("/v1/reviews")
     ResponseEntity<ResDTO<ReviewSearchResDTOv1>> searchBy(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                                                                 @RequestParam(name = "userId", required = false) Long userId,
-                                                                 @RequestParam(name = "restaurantId", required = false) Long restaurantId,
-                                                                 @RequestParam(name = "sort", required = false) String sort);
+                                                          @RequestParam(name = "userId", required = false) Long userId,
+                                                          @RequestParam(name = "restaurantId", required = false) Long restaurantId,
+                                                          @RequestParam(name = "sort", required = false) String sort);
 
     @Operation(summary = "리뷰 상세 조회", description = "리뷰 ID 를 기준으로 리뷰를 상세 조회하는 API 입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "리뷰 조회 성공", content = @Content(schema = @Schema(implementation = ResDTO.class))),
             @ApiResponse(responseCode = "400", description = "리뷰 조회 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
     })
-    ResponseEntity<ResDTO<ReviewGetByIdResDTOv1>> getBy(@PathVariable Long reviewId);
+    ResponseEntity<ResDTO<ReviewGetByIdResDTOv1>> getBy(@PathVariable Long id);
 
 
     @Operation(summary = "리뷰 수정", description = "사용자의 ID 와 리뷰의 ID 를 기준으로 리뷰를 수정하는 API 입니다.")
@@ -55,8 +55,8 @@ public interface ReviewControllerSwagger {
             @ApiResponse(responseCode = "200", description = "리뷰 수정 성공", content = @Content(schema = @Schema(implementation = ResDTO.class))),
             @ApiResponse(responseCode = "400", description = "리뷰 수정 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
     })
-    @PutMapping("/v1/reviews/{reviewId}")
-    ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long reviewId, @Valid @RequestBody PutReviewReqDTOv1 dto);
+    @PutMapping("/v1/reviews/{id}")
+    ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id, @Valid @RequestBody PutReviewReqDTOv1 dto);
 
 
     @Operation(summary = "리뷰 삭제", description = "사용자의 ID 와 리뷰 ID 를 기준으로 리뷰를 삭제하는 API 입니다.")
@@ -64,6 +64,6 @@ public interface ReviewControllerSwagger {
             @ApiResponse(responseCode = "200", description = "리뷰 삭제 성공", content = @Content(schema = @Schema(implementation = ResDTO.class))),
             @ApiResponse(responseCode = "400", description = "리뷰 삭제 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
     })
-    @DeleteMapping("/v1/reviews/{reviewId}")
-    ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long reviewId);
+    @DeleteMapping("/v1/reviews/{id}")
+    ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id);
 }
