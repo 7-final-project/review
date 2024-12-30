@@ -2,14 +2,14 @@ package com.qring.review.presentation.v1.controller;
 
 
 
-import com.qring.review.application.v1.res.ResDTO;
-import com.qring.review.application.v1.res.ReviewGetByIdResDTOv1;
-import com.qring.review.application.v1.res.ReviewPostResDTOv1;
-import com.qring.review.application.v1.res.ReviewSearchResDTOv1;
+import com.qring.review.application.global.dto.ResDTO;
+import com.qring.review.application.v1.res.ReviewGetByIdResDTOV1;
+import com.qring.review.application.v1.res.ReviewPostResDTOV1;
+import com.qring.review.application.v1.res.ReviewSearchResDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.infrastructure.docs.ReviewControllerSwagger;
-import com.qring.review.presentation.v1.req.PostReviewReqDTOv1;
-import com.qring.review.presentation.v1.req.PutReviewReqDTOv1;
+import com.qring.review.presentation.v1.req.PostReviewReqDTOV1;
+import com.qring.review.presentation.v1.req.PutReviewReqDTOV1;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,11 +23,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/v1/reviews")
 public class ReviewControllerV1 implements ReviewControllerSwagger {
 
-    @PostMapping("/v1/reviews")
-    public ResponseEntity<ResDTO<ReviewPostResDTOv1>> postBy(@RequestHeader("X-User-Id") Long userId,
-                                                             @Valid @RequestBody PostReviewReqDTOv1 dto) {
+    @PostMapping
+    public ResponseEntity<ResDTO<ReviewPostResDTOV1>> postBy(@RequestHeader("X-User-Id") Long userId,
+                                                             @Valid @RequestBody PostReviewReqDTOV1 dto) {
 
         // -----
         // TODO : 더미데이터입니다.
@@ -40,17 +41,17 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         // ----- 추후 삭제하시면 됩니다.
 
         return new ResponseEntity<>(
-                ResDTO.<ReviewPostResDTOv1>builder()
+                ResDTO.<ReviewPostResDTOV1>builder()
                         .code(HttpStatus.CREATED.value())
                         .message("리뷰 생성에 성공했습니다.")
-                        .data(ReviewPostResDTOv1.of(dummyReviewEntity))
+                        .data(ReviewPostResDTOV1.of(dummyReviewEntity))
                         .build(),
                 HttpStatus.CREATED
         );
     }
 
-    @GetMapping("/v1/reviews")
-    public ResponseEntity<ResDTO<ReviewSearchResDTOv1>> searchBy(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+    @GetMapping
+    public ResponseEntity<ResDTO<ReviewSearchResDTOV1>> searchBy(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                                                                  @RequestParam(name = "userId", required = false) Long userId,
                                                                  @RequestParam(name = "restaurantId", required = false) Long restaurantId,
                                                                  @RequestParam(name = "sort", required = false) String sort) {
@@ -88,17 +89,17 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         // ----- 추후 삭제하시면 됩니다.
 
         return new ResponseEntity<>(
-                ResDTO.<ReviewSearchResDTOv1>builder()
+                ResDTO.<ReviewSearchResDTOV1>builder()
                         .code(HttpStatus.OK.value())
                         .message("리뷰 검색에 성공했습니다.")
-                        .data(ReviewSearchResDTOv1.of(dummyPage))
+                        .data(ReviewSearchResDTOV1.of(dummyPage))
                         .build(),
                 HttpStatus.OK
         );
     }
 
-    @GetMapping("/v1/reviews/{reviewId}")
-    public ResponseEntity<ResDTO<ReviewGetByIdResDTOv1>> getBy(@PathVariable Long reviewId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ResDTO<ReviewGetByIdResDTOV1>> getBy(@PathVariable Long id) {
 
         // -----
         // TODO : 더미데이터입니다.
@@ -111,19 +112,19 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         // ----- 추후 삭제하시면 됩니다.
 
         return new ResponseEntity<>(
-                ResDTO.<ReviewGetByIdResDTOv1>builder()
+                ResDTO.<ReviewGetByIdResDTOV1>builder()
                         .code(HttpStatus.OK.value())
                         .message("리뷰 검색에 성공했습니다.")
-                        .data(ReviewGetByIdResDTOv1.of(dummyReviewEntity))
+                        .data(ReviewGetByIdResDTOV1.of(dummyReviewEntity))
                         .build(),
                 HttpStatus.OK
         );
     }
 
-    @PutMapping("/v1/reviews/{reviewId}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
-                                                @PathVariable Long reviewId,
-                                                @Valid @RequestBody PutReviewReqDTOv1 dto) {
+                                                @PathVariable Long id,
+                                                @Valid @RequestBody PutReviewReqDTOV1 dto) {
 
         return new ResponseEntity<>(
                 ResDTO.builder()
@@ -134,8 +135,8 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
         );
     }
 
-    @DeleteMapping("/v1/reviews/{reviewId}")
-    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long reviewId) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id) {
 
         return new ResponseEntity<>(
                 ResDTO.builder()

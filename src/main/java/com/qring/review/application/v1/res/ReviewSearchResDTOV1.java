@@ -13,12 +13,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewSearchResDTOv1 {
+public class ReviewSearchResDTOV1 {
 
     private ReviewPage reviewPage;
 
-    public static ReviewSearchResDTOv1 of(Page<ReviewEntity> reviewEntityPage) {
-        return ReviewSearchResDTOv1.builder()
+    public static ReviewSearchResDTOV1 of(Page<ReviewEntity> reviewEntityPage) {
+        return ReviewSearchResDTOV1.builder()
                 .reviewPage(ReviewPage.from(reviewEntityPage))
                 .build();
     }
@@ -46,7 +46,7 @@ public class ReviewSearchResDTOv1 {
         public static class Review {
 
             private Long userId;
-            private Long reviewId;
+            private Long id;
             private Long restaurantId;
             private int rating;
             private String content;
@@ -61,7 +61,7 @@ public class ReviewSearchResDTOv1 {
 
                 return Review.builder()
                         .userId(reviewEntity.getUserId())
-                        .reviewId(reviewEntity.getId())
+                        .id(reviewEntity.getId())
                         .restaurantId(reviewEntity.getRestaurantId())
                         .rating(reviewEntity.getRating())
                         .content(reviewEntity.getContent())

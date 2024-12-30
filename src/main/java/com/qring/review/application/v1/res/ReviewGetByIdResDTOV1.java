@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewPostResDTOv1 {
+public class ReviewGetByIdResDTOV1 {
 
     private Review review;
 
-    public static ReviewPostResDTOv1 of(ReviewEntity reviewEntity) {
-        return ReviewPostResDTOv1.builder()
+    public static ReviewGetByIdResDTOV1 of(ReviewEntity reviewEntity) {
+        return ReviewGetByIdResDTOV1.builder()
                 .review(Review.from(reviewEntity))
                 .build();
     }
@@ -27,6 +27,7 @@ public class ReviewPostResDTOv1 {
     public static class Review {
 
         private Long userId;
+        private Long id;
         private Long restaurantId;
         private int rating;
         private String content;
@@ -34,6 +35,7 @@ public class ReviewPostResDTOv1 {
         public static Review from(ReviewEntity reviewEntity) {
             return Review.builder()
                     .userId(reviewEntity.getUserId())
+                    .id(reviewEntity.getId())
                     .restaurantId(reviewEntity.getRestaurantId())
                     .rating(reviewEntity.getRating())
                     .content(reviewEntity.getContent())

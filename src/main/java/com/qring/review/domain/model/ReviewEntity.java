@@ -47,17 +47,17 @@ public class ReviewEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(name = "created_by", updatable = false)
+    @Column(name = "created_by", nullable = false, updatable = false)
     private String createdBy;
 
-    @Column(name = "modified_by")
+    @Column(name = "modified_by", nullable = false)
     private String modifiedBy;
 
     @Column(name = "deleted_by")
     private String deletedBy;
 
     @Builder
-    public ReviewEntity (Long userId, Long restaurantId, int rating, String content) {
+    public ReviewEntity(Long userId, Long restaurantId, int rating, String content) {
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.rating = rating;
