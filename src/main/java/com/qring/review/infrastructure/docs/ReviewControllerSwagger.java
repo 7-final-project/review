@@ -1,6 +1,6 @@
 package com.qring.review.infrastructure.docs;
 
-import com.qring.review.application.v1.res.ResDTO;
+import com.qring.review.application.global.dto.ResDTO;
 import com.qring.review.application.v1.res.ReviewGetByIdResDTOv1;
 import com.qring.review.application.v1.res.ReviewPostResDTOv1;
 import com.qring.review.application.v1.res.ReviewSearchResDTOv1;
