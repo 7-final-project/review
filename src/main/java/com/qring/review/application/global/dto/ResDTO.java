@@ -1,4 +1,4 @@
-package com.qring.review.application.v1.res;
+package com.qring.review.application.global.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResDTO<T> {
+
     private Integer code;
     private String message;
     private T data;
+
 }
