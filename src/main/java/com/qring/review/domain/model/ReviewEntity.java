@@ -57,7 +57,7 @@ public class ReviewEntity {
     private String deletedBy;
 
     @Builder
-    public ReviewEntity (Long userId, Long restaurantId, int rating, String content) {
+    public ReviewEntity(Long userId, Long restaurantId, int rating, String content) {
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.rating = rating;
