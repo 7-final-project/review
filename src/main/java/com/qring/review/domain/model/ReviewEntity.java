@@ -54,25 +54,29 @@ public class ReviewEntity {
     private String deletedBy;
 
     @Builder
-    public ReviewEntity(Long userId, Long restaurantId, int rating, String content) {
+    public ReviewEntity(Long userId, Long restaurantId, int rating, String content, String username) {
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.rating = rating;
         this.content = content;
+        this.createdBy = username;
+        this.modifiedBy = username;
     }
 
-    public static ReviewEntity createReviewEntity(Long userId, Long restaurantId, int rating, String content) {
+    public static ReviewEntity createReviewEntity(Long userId, Long restaurantId, int rating, String content, String username) {
         return ReviewEntity.builder()
                 .userId(userId)
                 .restaurantId(restaurantId)
                 .rating(rating)
                 .content(content)
+                .username(username)
                 .build();
     }
 
-    public void updateReviewEntity(int rating, String content) {
+    public void updateReviewEntity(int rating, String content, String username) {
         this.rating = rating;
         this.content = content;
+        this.modifiedBy = username;
     }
 
     // 논리 삭제 메서드
