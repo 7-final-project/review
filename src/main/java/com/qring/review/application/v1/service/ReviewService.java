@@ -9,7 +9,6 @@ import com.qring.review.domain.repository.ReviewRepository;
 import com.qring.review.presentation.v1.req.PostReviewReqDTOV1;
 import com.qring.review.presentation.v1.req.PutReviewReqDTOV1;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,7 @@ public class ReviewService {
                 dto.getReview().getRating(),
                 dto.getReview().getContent(),
                 String.valueOf(userId)
-                );
+        );
 
         // 저장 및 DTO 반환
         return ReviewPostResDTOV1.of(reviewRepository.save(reviewEntityForSave));

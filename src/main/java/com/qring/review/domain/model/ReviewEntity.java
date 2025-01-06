@@ -1,7 +1,10 @@
 package com.qring.review.domain.model;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +20,8 @@ import java.time.LocalDateTime;
 @Table(name = "p_review")
 public class ReviewEntity {
 
-    @Id @Tsid
+    @Id
+    @Tsid
     @Column(name = "review_id")
     private Long id;
 
@@ -38,7 +42,7 @@ public class ReviewEntity {
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "modified_at" , nullable = false)
+    @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 
     @Column(name = "deleted_at")

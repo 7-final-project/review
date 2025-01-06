@@ -56,6 +56,7 @@ public class ReviewQueryRepository {
     private BooleanExpression userIdEq(Long userId) {
         return userId != null ? reviewEntity.userId.eq(userId) : null;
     }
+
     private BooleanExpression restaurantIdEq(Long restaurantId) {
         return restaurantId != null ? reviewEntity.restaurantId.eq(restaurantId) : null;
     }
