@@ -23,11 +23,13 @@ public class ReviewService {
     @Transactional
     public ReviewPostResDTOV1 postBy(Long userId, PostReviewReqDTOV1 dto) {
         // 리뷰 엔티티 생성
+        // 레스토랑 아이디 검증 필요(FeignClent)
         ReviewEntity reviewEntityForSave = ReviewEntity.createReviewEntity(
                 userId,
                 dto.getReview().getRestaurantId(),
                 dto.getReview().getRating(),
-                dto.getReview().getContent()
+                dto.getReview().getContent(),
+                String.valueOf(userId)
                 );
 
         // 저장 및 DTO 반환
@@ -56,7 +58,8 @@ public class ReviewService {
         // 리뷰 수정
         reviewEntityForModify.updateReviewEntity(
                 dto.getReview().getRating(),
-                dto.getReview().getContent()
+                dto.getReview().getContent(),
+                String.valueOf(userId)
         );
     }
 
