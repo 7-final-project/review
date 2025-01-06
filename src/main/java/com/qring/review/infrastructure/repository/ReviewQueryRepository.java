@@ -23,7 +23,7 @@ public class ReviewQueryRepository {
 
     // 조건에 따른 식당 검색
     public Page<ReviewEntity> findReviewPageByDeletedAtIsNullWithConditions(
-            Long userId, Long restaurantId, String sort, Pageable pageable) {
+            Pageable pageable, Long userId, Long restaurantId, String sort) {
 
         // 조건에 맞는 결과 조회
         List<ReviewEntity> results = queryFactory

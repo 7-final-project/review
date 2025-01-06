@@ -36,7 +36,7 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public ReviewSearchResDTOV1 searchBy(Pageable pageable, Long userId, Long restaurantId, String sort) {
-        return ReviewSearchResDTOV1.of(reviewRepository.findReviewPageByDeletedAtIsNullWithConditions(userId, restaurantId, sort, pageable));
+        return ReviewSearchResDTOV1.of(reviewRepository.findReviewPageByDeletedAtIsNullWithConditions(pageable, userId, restaurantId, sort));
     }
 
     @Transactional(readOnly = true)
