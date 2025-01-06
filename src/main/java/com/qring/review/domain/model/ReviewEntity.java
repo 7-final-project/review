@@ -33,9 +33,6 @@ public class ReviewEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "rating_average")
-    private float ratingAverage;
-
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
