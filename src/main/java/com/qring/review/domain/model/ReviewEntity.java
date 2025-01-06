@@ -60,4 +60,13 @@ public class ReviewEntity {
         this.rating = rating;
         this.content = content;
     }
+
+    public static ReviewEntity createReviewEntity(Long userId, Long restaurantId, int rating, String content) {
+        return ReviewEntity.builder()
+                .userId(userId)
+                .restaurantId(restaurantId)
+                .rating(rating)
+                .content(content)
+                .build();
+    }
 }
