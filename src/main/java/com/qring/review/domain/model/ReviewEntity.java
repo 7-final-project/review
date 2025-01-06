@@ -69,4 +69,15 @@ public class ReviewEntity {
                 .content(content)
                 .build();
     }
+
+    public void updateReviewEntity(int rating, String content) {
+        this.rating = rating;
+        this.content = content;
+    }
+
+    // 논리 삭제 메서드
+    public void deleteReviewEntity(String username) {
+        this.deletedAt = LocalDateTime.now();
+        this.deletedBy = username;
+    }
 }
