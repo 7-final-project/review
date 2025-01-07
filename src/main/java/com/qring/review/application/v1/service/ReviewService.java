@@ -30,13 +30,12 @@ public class ReviewService {
         /*
          -----
          TODO : FeignClent 로직 구현
-        step 1. 식당 조회(FeignClent)
-                - dto에 있는 restaurantId를 사용하여 해당 식당을 조회합니다.
-        step 2. 예약 조회(FeignClent)
+        step 1. 예약 조회(FeignClent)
                 - passport에 있는 userId를 사용하여 해당 식당을 방문한적이 있는지 조회합니다.
                 - 방문한 적이 없다면 방문한 고객만 리뷰를 작성할 수 있다고 안내합니다.
          -----
         */
+        // 식당 조회(FeignClent)
         if(!restaurantService.existsBy(dto.getReview().getRestaurantId())){
             throw new EntityNotFoundException("식당을 찾을 수 없습니다.");
         }
