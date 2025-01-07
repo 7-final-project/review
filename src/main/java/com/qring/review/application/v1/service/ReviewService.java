@@ -22,6 +22,7 @@ import java.util.List;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final RestaurantService restaurantService;
 
     @Transactional
     public ReviewPostResDTOV1 postBy(String passport, PostReviewReqDTOV1 dto) {
@@ -31,7 +32,7 @@ public class ReviewService {
          TODO : FeignClent 로직 구현
         step 1. 식당 조회(FeignClent)
                 - dto에 있는 restaurantId를 사용하여 해당 식당을 조회합니다.
-        step 2. 방문 조회(FeignClent)
+        step 2. 예약 조회(FeignClent)
                 - passport에 있는 userId를 사용하여 해당 식당을 방문한적이 있는지 조회합니다.
                 - 방문한 적이 없다면 방문한 고객만 리뷰를 작성할 수 있다고 안내합니다.
          -----
@@ -55,13 +56,6 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public ReviewGetByIdResDTOV1 getBy(Long id) {
-        /*
-         -----
-         TODO : FeignClent 로직 구현
-        step 1. 식당 조회(FeignClent)
-                - dto에 있는 restaurantId를 사용하여 해당 식당을 조회합니다.
-         -----
-        */
         // 리뷰 조회
         ReviewEntity reviewEntityForMapping = reviewRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다."));
@@ -70,17 +64,6 @@ public class ReviewService {
 
     @Transactional
     public void putBy(String passport, Long id, PutReviewReqDTOV1 dto) {
-        /*
-         -----
-         TODO : FeignClent, 권한 검증 로직 구현
-        step 1. 식당 조회(FeignClent)
-                - dto에 있는 restaurantId를 사용하여 해당 식당을 조회합니다.
-        step 2. 권한 조회
-                - 권한을 조회해서 관리자는 모든 리뷰를 수정할 수 있고 고객은 본인의 리뷰만 수정 할 수 있도록 로직을 구현합니다.
-        step 3. 본인이 작성한 리뷰인지 조회
-                - 관리자가 아니라면 본인이 작성한 리뷰인지 확인하고 본인의 리뷰만 수정할 수 있도록 구현합니다.
-         -----
-        */
         // 리뷰 조회
         ReviewEntity reviewEntityForModify = getReviewEntityById(id);
 
@@ -99,17 +82,6 @@ public class ReviewService {
 
     @Transactional
     public void deleteBy(String passport, Long id) {
-        /*
-         -----
-         TODO : FeignClent, 권한 검증 로직 구현
-        step 1. 식당 조회(FeignClent)
-                - dto에 있는 restaurantId를 사용하여 해당 식당을 조회합니다.
-        step 2. 권한 조회
-                - 권한을 조회해서 관리자는 모든 리뷰를 삭제할 수 있고 고객은 본인의 리뷰만 삭제 할 수 있도록 로직을 구현합니다.
-        step 3. 본인이 작성한 리뷰인지 조회
-                - 관리자가 아니라면 본인이 작성한 리뷰인지 확인하고 본인의 리뷰만 수정할 수 있도록 구현합니다.
-         -----
-        */
         // 리뷰 조회
         ReviewEntity reviewEntityForDelete = getReviewEntityById(id);
 
