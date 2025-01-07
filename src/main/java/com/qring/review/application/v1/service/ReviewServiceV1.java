@@ -15,14 +15,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
-public class ReviewService {
+public class ReviewServiceV1 {
 
     private final ReviewRepository reviewRepository;
-    private final RestaurantService restaurantService;
+    private final RestaurantServiceV1 ReviewServiceV1;
 
     @Transactional
     public ReviewPostResDTOV1 postBy(String passport, PostReviewReqDTOV1 dto) {
@@ -31,12 +29,12 @@ public class ReviewService {
          -----
          TODO : FeignClent 로직 구현
         step 1. 예약 조회(FeignClent)
-                - passport에 있는 userId를 사용하여 해당 식당을 방문한적이 있는지 조회합니다.
+                - passport에 있는 userId와 dto에 있는 restaurantId를 사용하여 해당 식당을 방문한적이 있는지 조회합니다.
                 - 방문한 적이 없다면 방문한 고객만 리뷰를 작성할 수 있다고 안내합니다.
          -----
         */
         // 식당 조회(FeignClent)
-        if(!restaurantService.existsBy(dto.getReview().getRestaurantId())){
+        if(!ReviewServiceV1.existsBy(dto.getReview().getRestaurantId())){
             throw new EntityNotFoundException("식당을 찾을 수 없습니다.");
         }
 
