@@ -1,6 +1,7 @@
 package com.qring.review.application.v1.service;
 
 import com.qring.review.application.global.exception.EntityNotFoundException;
+import com.qring.review.application.global.exception.UnauthorizedAccessException;
 import com.qring.review.application.v1.res.ReviewGetByIdResDTOV1;
 import com.qring.review.application.v1.res.ReviewPostResDTOV1;
 import com.qring.review.application.v1.res.ReviewSearchResDTOV1;
@@ -30,6 +31,9 @@ public class ReviewService {
          TODO : FeignClent 로직 구현
         step 1. 식당 조회(FeignClent)
                 - dto에 있는 restaurantId를 사용하여 해당 식당을 조회합니다.
+        step 2. 방문 조회(FeignClent)
+                - passport에 있는 userId를 사용하여 해당 식당을 방문한적이 있는지 조회합니다.
+                - 방문한 적이 없다면 방문한 고객만 리뷰를 작성할 수 있다고 안내합니다.
          -----
         */
         ReviewEntity reviewEntityForSave = ReviewEntity.createReviewEntity(
@@ -59,7 +63,8 @@ public class ReviewService {
          -----
         */
         // 리뷰 조회
-        ReviewEntity reviewEntityForMapping = getReviewEntityById(id);
+        ReviewEntity reviewEntityForMapping = reviewRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다."));
         return ReviewGetByIdResDTOV1.of(reviewEntityForMapping);
     }
 
@@ -72,10 +77,17 @@ public class ReviewService {
                 - dto에 있는 restaurantId를 사용하여 해당 식당을 조회합니다.
         step 2. 권한 조회
                 - 권한을 조회해서 관리자는 모든 리뷰를 수정할 수 있고 고객은 본인의 리뷰만 수정 할 수 있도록 로직을 구현합니다.
+        step 3. 본인이 작성한 리뷰인지 조회
+                - 관리자가 아니라면 본인이 작성한 리뷰인지 확인하고 본인의 리뷰만 수정할 수 있도록 구현합니다.
          -----
         */
         // 리뷰 조회
         ReviewEntity reviewEntityForModify = getReviewEntityById(id);
+
+        // 관리자가 아닐 경우 본인이 작성한 리뷰인지 확인
+        if (!PassportUtil.getRole(passport).equals("관리자") && !reviewEntityForModify.getUserId().equals(PassportUtil.getUserId(passport))) {
+            throw new UnauthorizedAccessException("본인이 작성한 리뷰만 수정할 수 있습니다.");
+        }
 
         // 리뷰 수정
         reviewEntityForModify.updateReviewEntity(
@@ -94,10 +106,17 @@ public class ReviewService {
                 - dto에 있는 restaurantId를 사용하여 해당 식당을 조회합니다.
         step 2. 권한 조회
                 - 권한을 조회해서 관리자는 모든 리뷰를 삭제할 수 있고 고객은 본인의 리뷰만 삭제 할 수 있도록 로직을 구현합니다.
+        step 3. 본인이 작성한 리뷰인지 조회
+                - 관리자가 아니라면 본인이 작성한 리뷰인지 확인하고 본인의 리뷰만 수정할 수 있도록 구현합니다.
          -----
         */
         // 리뷰 조회
         ReviewEntity reviewEntityForDelete = getReviewEntityById(id);
+
+        // 관리자가 아닐 경우 본인이 작성한 리뷰인지 확인
+        if (!PassportUtil.getRole(passport).equals("관리자") && !reviewEntityForDelete.getUserId().equals(PassportUtil.getUserId(passport))) {
+            throw new UnauthorizedAccessException("본인이 작성한 리뷰만 삭제할 수 있습니다.");
+        }
 
         // 리뷰 논리 삭제
         reviewEntityForDelete.deleteReviewEntity(PassportUtil.getUsername(passport));
@@ -107,5 +126,7 @@ public class ReviewService {
         return reviewRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다."));
     }
+
+
 }
 
