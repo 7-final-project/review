@@ -26,7 +26,7 @@ public class ReviewQueryRepository {
             Pageable pageable, Long userId, Long restaurantId, String sort) {
 
         // 조건에 맞는 결과 조회
-        List<ReviewEntity> results = queryFactory
+        List<ReviewEntity> resultList = queryFactory
                 .selectFrom(reviewEntity)
                 .where(
                         reviewEntity.deletedAt.isNull(),
@@ -49,7 +49,7 @@ public class ReviewQueryRepository {
                 );
 
         // Page 반환
-        return PageableExecutionUtils.getPage(results, pageable, countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(resultList, pageable, countQuery::fetchOne);
     }
 
     // 조건 메서드들
