@@ -4,6 +4,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 public interface RestaurantService {
 
-    boolean existsBy(@PathVariable Long hubId);
+    boolean existsBy(@PathVariable Long id);
 
 }

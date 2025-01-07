@@ -37,6 +37,10 @@ public class ReviewService {
                 - 방문한 적이 없다면 방문한 고객만 리뷰를 작성할 수 있다고 안내합니다.
          -----
         */
+        if(!restaurantService.existsBy(dto.getReview().getRestaurantId())){
+            throw new EntityNotFoundException("식당을 찾을 수 없습니다.");
+        }
+
         ReviewEntity reviewEntityForSave = ReviewEntity.createReviewEntity(
                 PassportUtil.getUserId(passport),
                 dto.getReview().getRestaurantId(),

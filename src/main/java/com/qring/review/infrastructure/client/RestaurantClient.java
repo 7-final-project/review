@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "restaurant-service")
 public interface RestaurantClient extends RestaurantService {
 
-    @GetMapping("/v1/{restaurantId}/restaurants")
-    boolean restaurantExists(@PathVariable("restaurantId") Long restaurantId);
+    @GetMapping("/v1/restaurants/{id}/exists")
+    boolean existsBy(@PathVariable("id") Long id);
 }
