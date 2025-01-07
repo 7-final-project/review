@@ -43,14 +43,14 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public ReviewGetByIdResDTOV1 getBy(Long id) {
         // 리뷰 조회
-        ReviewEntity reviewEntityForMapping = findByIdAndDeletedAtIsNull(id);
+        ReviewEntity reviewEntityForMapping = getReviewEntityById(id);
         return ReviewGetByIdResDTOV1.of(reviewEntityForMapping);
     }
 
     @Transactional
     public void putBy(Long userId, Long id, PutReviewReqDTOV1 dto) {
         // 리뷰 조회
-        ReviewEntity reviewEntityForModify = findByIdAndDeletedAtIsNull(id);
+        ReviewEntity reviewEntityForModify = getReviewEntityById(id);
 
         // 리뷰 수정
         reviewEntityForModify.updateReviewEntity(
@@ -63,13 +63,13 @@ public class ReviewService {
     @Transactional
     public void deleteBy(Long userId, Long id) {
         // 리뷰 조회
-        ReviewEntity reviewEntityForDelete = findByIdAndDeletedAtIsNull(id);
+        ReviewEntity reviewEntityForDelete = getReviewEntityById(id);
 
         // 리뷰 논리 삭제
         reviewEntityForDelete.deleteReviewEntity(userId.toString());
     }
 
-    private ReviewEntity findByIdAndDeletedAtIsNull(Long id) {
+    private ReviewEntity getReviewEntityById(Long id) {
         return reviewRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다."));
     }
