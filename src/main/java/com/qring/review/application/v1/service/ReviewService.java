@@ -70,10 +70,7 @@ public class ReviewService {
         // 리뷰 조회
         ReviewEntity reviewEntityForModify = getReviewEntityById(id);
 
-        // 관리자가 아닐 경우 본인이 작성한 리뷰인지 확인
-        if (!PassportUtil.getRole(passport).equals("관리자") && !reviewEntityForModify.getUserId().equals(PassportUtil.getUserId(passport))) {
-            throw new UnauthorizedAccessException("본인이 작성한 리뷰만 수정할 수 있습니다.");
-        }
+        validateReviewOwnership(passport, reviewEntityForModify.getUserId(), "수정");
 
         // 리뷰 수정
         reviewEntityForModify.updateReviewEntity(
@@ -88,10 +85,7 @@ public class ReviewService {
         // 리뷰 조회
         ReviewEntity reviewEntityForDelete = getReviewEntityById(id);
 
-        // 관리자가 아닐 경우 본인이 작성한 리뷰인지 확인
-        if (!PassportUtil.getRole(passport).equals("관리자") && !reviewEntityForDelete.getUserId().equals(PassportUtil.getUserId(passport))) {
-            throw new UnauthorizedAccessException("본인이 작성한 리뷰만 삭제할 수 있습니다.");
-        }
+        validateReviewOwnership(passport, reviewEntityForDelete.getUserId(), "삭제");
 
         // 리뷰 논리 삭제
         reviewEntityForDelete.deleteReviewEntity(PassportUtil.getUsername(passport));
@@ -100,6 +94,16 @@ public class ReviewService {
     private ReviewEntity getReviewEntityById(Long id) {
         return reviewRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다."));
+    }
+
+
+    private void validateReviewOwnership(String passport, Long entityUserId, String action) {
+        String role = PassportUtil.getRole(passport);
+        Long userId = PassportUtil.getUserId(passport);
+
+        if (!"관리자".equals(role) && !entityUserId.equals(userId)) {
+            throw new UnauthorizedAccessException("본인이 작성한 리뷰만 " + action + "할 수 있습니다.");
+        }
     }
 
 
