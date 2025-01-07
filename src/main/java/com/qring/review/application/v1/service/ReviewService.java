@@ -6,6 +6,7 @@ import com.qring.review.application.v1.res.ReviewPostResDTOV1;
 import com.qring.review.application.v1.res.ReviewSearchResDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.domain.repository.ReviewRepository;
+import com.qring.review.infrastructure.util.PassportUtil;
 import com.qring.review.presentation.v1.req.PostReviewReqDTOV1;
 import com.qring.review.presentation.v1.req.PutReviewReqDTOV1;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Transactional
-    public ReviewPostResDTOV1 postBy(Long userId, PostReviewReqDTOV1 dto) {
+    public ReviewPostResDTOV1 postBy(String passport, PostReviewReqDTOV1 dto) {
         // 리뷰 엔티티 생성
         /*
          -----
@@ -32,11 +33,11 @@ public class ReviewService {
          -----
         */
         ReviewEntity reviewEntityForSave = ReviewEntity.createReviewEntity(
-                userId,
+                PassportUtil.getUserId(passport),
                 dto.getReview().getRestaurantId(),
                 dto.getReview().getRating(),
                 dto.getReview().getContent(),
-                String.valueOf(userId)
+                PassportUtil.getUsername(passport)
         );
 
         // 저장 및 DTO 반환
@@ -63,7 +64,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void putBy(Long userId, Long id, PutReviewReqDTOV1 dto) {
+    public void putBy(String passport, Long id, PutReviewReqDTOV1 dto) {
         /*
          -----
          TODO : FeignClent, 권한 검증 로직 구현
@@ -80,12 +81,12 @@ public class ReviewService {
         reviewEntityForModify.updateReviewEntity(
                 dto.getReview().getRating(),
                 dto.getReview().getContent(),
-                String.valueOf(userId)
+                PassportUtil.getUsername(passport)
         );
     }
 
     @Transactional
-    public void deleteBy(Long userId, Long id) {
+    public void deleteBy(String passport, Long id) {
         /*
          -----
          TODO : FeignClent, 권한 검증 로직 구현
@@ -99,7 +100,7 @@ public class ReviewService {
         ReviewEntity reviewEntityForDelete = getReviewEntityById(id);
 
         // 리뷰 논리 삭제
-        reviewEntityForDelete.deleteReviewEntity(userId.toString());
+        reviewEntityForDelete.deleteReviewEntity(PassportUtil.getUsername(passport));
     }
 
     private ReviewEntity getReviewEntityById(Long id) {

@@ -26,14 +26,14 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ResDTO<ReviewPostResDTOV1>> postBy(@RequestHeader("X-User-Id") Long userId,
+    public ResponseEntity<ResDTO<ReviewPostResDTOV1>> postBy(@RequestHeader("X-Passport-Token") String passport,
                                                              @Valid @RequestBody PostReviewReqDTOV1 dto) {
 
         return new ResponseEntity<>(
                 ResDTO.<ReviewPostResDTOV1>builder()
                         .code(HttpStatus.CREATED.value())
                         .message("리뷰 생성에 성공했습니다.")
-                        .data(reviewService.postBy(userId, dto))
+                        .data(reviewService.postBy(passport, dto))
                         .build(),
                 HttpStatus.CREATED
         );
@@ -69,10 +69,10 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId,
+    public ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-Passport-Token") String passport,
                                                 @PathVariable Long id,
                                                 @Valid @RequestBody PutReviewReqDTOV1 dto) {
-        reviewService.putBy(userId, id, dto);
+        reviewService.putBy(passport, id, dto);
         return new ResponseEntity<>(
                 ResDTO.builder()
                         .code(HttpStatus.OK.value())
@@ -83,8 +83,8 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id) {
-        reviewService.deleteBy(userId, id);
+    public ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-Passport-Token") String passport, @PathVariable Long id) {
+        reviewService.deleteBy(passport, id);
         return new ResponseEntity<>(
                 ResDTO.builder()
                         .code(HttpStatus.OK.value())

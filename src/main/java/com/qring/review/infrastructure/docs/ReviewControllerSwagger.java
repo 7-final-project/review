@@ -28,7 +28,7 @@ public interface ReviewControllerSwagger {
             @ApiResponse(responseCode = "400", description = "리뷰 생성 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
     })
     @PostMapping("/v1/reviews")
-    ResponseEntity<ResDTO<ReviewPostResDTOV1>> postBy(@RequestHeader("X-User-Id") Long userId, @Valid @RequestBody PostReviewReqDTOV1 dto);
+    ResponseEntity<ResDTO<ReviewPostResDTOV1>> postBy(@RequestHeader("X-Passport-Token") String passport, @Valid @RequestBody PostReviewReqDTOV1 dto);
 
 
     @Operation(summary = "리뷰 검색", description = "동적 조건은 기준으로 리뷰를 검색하는 API 입니다.")
@@ -56,7 +56,7 @@ public interface ReviewControllerSwagger {
             @ApiResponse(responseCode = "400", description = "리뷰 수정 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
     })
     @PutMapping("/v1/reviews/{id}")
-    ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id, @Valid @RequestBody PutReviewReqDTOV1 dto);
+    ResponseEntity<ResDTO<Object>> putBy(@RequestHeader("X-Passport-Token") String passport, @PathVariable Long id, @Valid @RequestBody PutReviewReqDTOV1 dto);
 
 
     @Operation(summary = "리뷰 삭제", description = "사용자의 ID 와 리뷰 ID 를 기준으로 리뷰를 삭제하는 API 입니다.")
@@ -65,5 +65,5 @@ public interface ReviewControllerSwagger {
             @ApiResponse(responseCode = "400", description = "리뷰 삭제 실패.", content = @Content(schema = @Schema(implementation = ResDTO.class)))
     })
     @DeleteMapping("/v1/reviews/{id}")
-    ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-User-Id") Long userId, @PathVariable Long id);
+    ResponseEntity<ResDTO<Object>> deleteBy(@RequestHeader("X-Passport-Token") String passport, @PathVariable Long id);
 }
