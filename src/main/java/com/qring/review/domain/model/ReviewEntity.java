@@ -1,7 +1,10 @@
 package com.qring.review.domain.model;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +20,8 @@ import java.time.LocalDateTime;
 @Table(name = "p_review")
 public class ReviewEntity {
 
-    @Id @Tsid
+    @Id
+    @Tsid
     @Column(name = "review_id")
     private Long id;
 
@@ -33,15 +37,12 @@ public class ReviewEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "rating_average")
-    private float ratingAverage;
-
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "modified_at" , nullable = false)
+    @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 
     @Column(name = "deleted_at")
@@ -57,10 +58,34 @@ public class ReviewEntity {
     private String deletedBy;
 
     @Builder
-    public ReviewEntity(Long userId, Long restaurantId, int rating, String content) {
+    public ReviewEntity(Long userId, Long restaurantId, int rating, String content, String username) {
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.rating = rating;
         this.content = content;
+        this.createdBy = username;
+        this.modifiedBy = username;
+    }
+
+    public static ReviewEntity createReviewEntity(Long userId, Long restaurantId, int rating, String content, String username) {
+        return ReviewEntity.builder()
+                .userId(userId)
+                .restaurantId(restaurantId)
+                .rating(rating)
+                .content(content)
+                .username(username)
+                .build();
+    }
+
+    public void updateReviewEntity(int rating, String content, String username) {
+        this.rating = rating;
+        this.content = content;
+        this.modifiedBy = username;
+    }
+
+    // 논리 삭제 메서드
+    public void deleteReviewEntity(String username) {
+        this.deletedAt = LocalDateTime.now();
+        this.deletedBy = username;
     }
 }
