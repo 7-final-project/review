@@ -43,13 +43,14 @@ public class ReviewControllerV1 implements ReviewControllerSwagger {
     public ResponseEntity<ResDTO<ReviewSearchResDTOV1>> searchBy(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                                                                  @RequestParam(name = "userId", required = false) Long userId,
                                                                  @RequestParam(name = "restaurantId", required = false) Long restaurantId,
+                                                                 @RequestParam(name = "reservationId", required = false) Long reservationId,
                                                                  @RequestParam(name = "sort", required = false) String sort) {
 
         return new ResponseEntity<>(
                 ResDTO.<ReviewSearchResDTOV1>builder()
                         .code(HttpStatus.OK.value())
                         .message("리뷰 검색에 성공했습니다.")
-                        .data(ReviewServiceV1.searchBy(pageable, userId, restaurantId, sort))
+                        .data(ReviewServiceV1.searchBy(pageable, userId, restaurantId, reservationId, sort))
                         .build(),
                 HttpStatus.OK
         );

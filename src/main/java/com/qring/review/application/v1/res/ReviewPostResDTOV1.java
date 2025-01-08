@@ -28,6 +28,7 @@ public class ReviewPostResDTOV1 {
 
         private Long userId;
         private Long restaurantId;
+        private Long reservationId;
         private int rating;
         private String content;
 
@@ -35,6 +36,7 @@ public class ReviewPostResDTOV1 {
             return Review.builder()
                     .userId(reviewEntity.getUserId())
                     .restaurantId(reviewEntity.getRestaurantId())
+                    .reservationId(reviewEntity.getReservationId())
                     .rating(reviewEntity.getRating())
                     .content(reviewEntity.getContent())
                     .build();

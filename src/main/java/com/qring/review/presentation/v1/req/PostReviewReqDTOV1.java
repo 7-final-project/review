@@ -19,6 +19,9 @@ public class PostReviewReqDTOV1 {
         @NotNull(message = "식당 정보를 입력해주세요.")
         private Long restaurantId;
 
+        @NotNull(message = "예약 정보를 입력해주세요.")
+        private Long reservationId;
+
         @Positive(message = "평점을 입력해주세요.")
         @Min(value = 1, message = "평점은 최소 1점부터입니다.")
         @Max(value = 5, message = "평점은 최대 5점까지입니다.")

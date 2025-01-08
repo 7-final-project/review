@@ -40,6 +40,7 @@ public interface ReviewControllerSwagger {
     ResponseEntity<ResDTO<ReviewSearchResDTOV1>> searchBy(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                                                           @RequestParam(name = "userId", required = false) Long userId,
                                                           @RequestParam(name = "restaurantId", required = false) Long restaurantId,
+                                                          @RequestParam(name = "reservationId", required = false) Long reservationId,
                                                           @RequestParam(name = "sort", required = false) String sort);
 
     @Operation(summary = "리뷰 상세 조회", description = "리뷰 ID 를 기준으로 리뷰를 상세 조회하는 API 입니다.")

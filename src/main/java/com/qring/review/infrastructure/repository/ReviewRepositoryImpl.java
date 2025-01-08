@@ -24,8 +24,8 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
     // 조건에 따른 리뷰 검색
     @Override
-    public Page<ReviewEntity> findReviewPageByDeletedAtIsNullWithConditions(Pageable pageable, Long userId, Long restaurantId, String sort) {
-        return reviewQueryRepository.findReviewPageByDeletedAtIsNullWithConditions(pageable, userId, restaurantId, sort);
+    public Page<ReviewEntity> findReviewPageByDeletedAtIsNullWithConditions(Pageable pageable, Long userId, Long restaurantId, Long reservationId, String sort) {
+        return reviewQueryRepository.findReviewPageByDeletedAtIsNullWithConditions(pageable, userId, restaurantId, reservationId, sort);
     }
 
     // 리뷰 저장

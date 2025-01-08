@@ -29,7 +29,7 @@ public class ReviewServiceV1 {
          -----
          TODO : FeignClent 로직 구현
         step 1. 예약 조회(FeignClent)
-                - passport에 있는 userId와 dto에 있는 restaurantId를 사용하여 해당 식당을 방문한적이 있는지 조회합니다.
+                - passport에 있는 userId와 dto에 있는 restaurantId, reservationId를 사용하여 해당 식당을 방문한적이 있는지 조회합니다.
                 - 방문한 적이 없다면 방문한 고객만 리뷰를 작성할 수 있다고 안내합니다.
          -----
         */
@@ -41,6 +41,7 @@ public class ReviewServiceV1 {
         ReviewEntity reviewEntityForSave = ReviewEntity.createReviewEntity(
                 PassportUtil.getUserId(passport),
                 dto.getReview().getRestaurantId(),
+                dto.getReview().getReservationId(),
                 dto.getReview().getRating(),
                 dto.getReview().getContent(),
                 PassportUtil.getUsername(passport)
@@ -51,8 +52,8 @@ public class ReviewServiceV1 {
     }
 
     @Transactional(readOnly = true)
-    public ReviewSearchResDTOV1 searchBy(Pageable pageable, Long userId, Long restaurantId, String sort) {
-        return ReviewSearchResDTOV1.of(reviewRepository.findReviewPageByDeletedAtIsNullWithConditions(pageable, userId, restaurantId, sort));
+    public ReviewSearchResDTOV1 searchBy(Pageable pageable, Long userId, Long restaurantId, Long reservationId, String sort) {
+        return ReviewSearchResDTOV1.of(reviewRepository.findReviewPageByDeletedAtIsNullWithConditions(pageable, userId, restaurantId, reservationId, sort));
     }
 
     @Transactional(readOnly = true)
