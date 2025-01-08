@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceV1 {
@@ -20,6 +22,9 @@ public class ReviewServiceV1 {
     private final ReviewRepository reviewRepository;
     private final RestaurantServiceV1 ReviewServiceV1;
     private final ReservationServiceV1 reservationServiceV1;
+    private static final String STATUS_VISITED = "방문";
+    private static final String STATUS_EXISTS = "exists";
+    private static final String ROLE_ADMIN = "관리자";
 
     @Transactional
     public ReviewPostResDTOV1 postBy(String passport, PostReviewReqDTOV1 dto) {
@@ -50,24 +55,24 @@ public class ReviewServiceV1 {
 
 
         // 예약이 없는 경우 또는 미방문 상태일 경우
-        if (reservationInfo == null || !"방문".equals(reservationInfo.getStatus())) {
+        if (reservationInfo == null || !Objects.equals(reservationInfo.getStatus(), STATUS_VISITED)) {
             throw new EntityNotFoundException("예약 정보가 없거나 방문 기록이 없습니다.");
         }
 
         // 예약된 유저와 현재 유저가 동일한지 확인
-        if (!reservationInfo.getUserId().equals(PassportUtil.getUserId(passport))) {
+        if (!Objects.equals(reservationInfo.getUserId(), PassportUtil.getUserId(passport))) {
             throw new UnauthorizedAccessException("로그인한 유저와 예약 정보가 일치하지 않습니다.");
         }
 
         // 예약된 식당과 현재 요청된 식당이 동일한지 확인
-        if (!reservationInfo.getRestaurantId().equals(dto.getReview().getRestaurantId())) {
+        if (!Objects.equals(reservationInfo.getRestaurantId(), dto.getReview().getRestaurantId())) {
             throw new UnauthorizedAccessException("예약된 식당과 요청된 식당이 일치하지 않습니다.");
         }
 
         // 식당 조회(FeignClent)
         RestaurantExistsByIdResDTOV1 response = ReviewServiceV1.existsBy(dto.getReview().getRestaurantId()).getBody().getData();
 
-        if (!response.getStatus().equals("exists")) {
+        if (!Objects.equals(response.getStatus(), STATUS_EXISTS)) {
             throw new EntityNotFoundException("식당을 찾을 수 없습니다.");
         }
 
@@ -133,7 +138,7 @@ public class ReviewServiceV1 {
         String role = PassportUtil.getRole(passport);
         Long userId = PassportUtil.getUserId(passport);
 
-        if (!"관리자".equals(role) && !entityUserId.equals(userId)) {
+        if (!Objects.equals(role, ROLE_ADMIN) && !Objects.equals(entityUserId, userId)) {
             throw new UnauthorizedAccessException("본인이 작성한 리뷰만 " + action + "할 수 있습니다.");
         }
     }
