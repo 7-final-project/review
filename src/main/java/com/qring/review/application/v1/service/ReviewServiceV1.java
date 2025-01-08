@@ -1,6 +1,5 @@
 package com.qring.review.application.v1.service;
 
-import com.qring.review.application.global.dto.ResDTO;
 import com.qring.review.application.global.exception.EntityNotFoundException;
 import com.qring.review.application.global.exception.UnauthorizedAccessException;
 import com.qring.review.application.v1.res.*;
@@ -11,7 +10,6 @@ import com.qring.review.presentation.v1.req.PostReviewReqDTOV1;
 import com.qring.review.presentation.v1.req.PutReviewReqDTOV1;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +31,7 @@ public class ReviewServiceV1 {
                 - 예약 id -> userId, restaurantId,status 를 반환하는데
                 - 없는 예약이거나 방문전이거나 방문이 아니면 userId, restaurantId는 빈 값으로 status는 미방문으로
                 - 방문 한 예약이면 userId, restaurantId는 해당 값으로 status는 방문으로
+                - 최종 테스트  완료하면 아래 더미 데이터와 TODO 주석 제거
          -----
         */
         // 예약 조회(FeignClient)
@@ -44,8 +43,8 @@ public class ReviewServiceV1 {
 
         // 더미 데이터 생성
         ReservationGetByIdResDTOV1.ReservationInfo reservationInfo = ReservationGetByIdResDTOV1.ReservationInfo.builder()
-                .userId(1L) // 더미 유저 ID
-                .restaurantId(2L) // 더미 식당 ID
+                .userId(664440243592086250L) // 더미 유저 ID
+                .restaurantId(664468014171726585L) // 더미 식당 ID
                 .status("방문") // 더미 상태 값
                 .build();
 
