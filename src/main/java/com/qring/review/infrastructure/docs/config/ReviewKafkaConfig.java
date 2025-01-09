@@ -29,7 +29,7 @@ public class ReviewKafkaConfig {
     }
 
     @Bean
-    public NewTopic reservationCreateEventTopic() {
-        return new NewTopic("reservation-create-event-topic", 1, (short) 1);
+    public NewTopic reviewCreateEventTopic() {
+        return new NewTopic("review-create-event-topic", 1, (short) 1);
     }
 }
