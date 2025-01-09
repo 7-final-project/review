@@ -14,9 +14,9 @@ public interface JpaReviewRepository extends JpaRepository<ReviewEntity, Long> {
     Optional<ReviewEntity> findByIdAndDeletedAtIsNull(Long id);
 
     // 특정 식당의 총 리뷰 개수와 총 점수를 반환
-    @Query("SELECT new com.qring.review.application.v1.message.ReviewStatisticsDTOV1(COUNT(r.id), COALESCE(SUM(r.rating), 0)) " +
+    @Query("SELECT COUNT(r.id), COALESCE(SUM(r.rating), 0) " +
             "FROM ReviewEntity r " +
             "WHERE r.restaurantId = :restaurantId AND r.deletedAt IS NULL")
-    ReviewStatisticsDTOV1 findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(@Param("restaurantId") Long restaurantId);
+    Object[] findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(@Param("restaurantId") Long restaurantId);
 
 }

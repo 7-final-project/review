@@ -37,6 +37,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
     @Override
     public ReviewStatisticsDTOV1 findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(Long restaurantId) {
-        return jpaReviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(restaurantId);
+        Object[] result = jpaReviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(restaurantId);
+
+        // 반환된 배열에서 reviewCount, totalRating값 추출 및 DTO 생성
+        return new ReviewStatisticsDTOV1(((Number) result[0]).longValue(), ((Number) result[1]).intValue());
     }
 }
