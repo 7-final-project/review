@@ -37,9 +37,12 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
     @Override
     public ReviewStatisticsDTOV1 findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(Long restaurantId) {
-        Object[] result = jpaReviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(restaurantId);
+        Object[] rawResult = jpaReviewRepository.findReviewStatisticsRawByRestaurantId(restaurantId);
+        Object[] result = (Object[]) rawResult[0];  // 중첩된 배열에서 실제 결과 추출하기 위해서 이렇게 사용함.
 
-        // 반환된 배열에서 reviewCount, totalRating값 추출 및 DTO 생성
-        return new ReviewStatisticsDTOV1(((Number) result[0]).longValue(), ((Number) result[1]).intValue());
+        long reviewCount = Long.valueOf(result[0].toString());
+        int totalRating = Integer.valueOf(result[1].toString());
+
+        return new ReviewStatisticsDTOV1(reviewCount, totalRating);
     }
 }
