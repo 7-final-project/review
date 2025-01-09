@@ -1,6 +1,6 @@
 package com.qring.review.infrastructure.repository;
 
-import com.qring.review.application.v1.message.ReviewStatistics;
+import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
-    public ReviewStatistics findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(Long restaurantId) {
+    public ReviewStatisticsDTOV1 findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(Long restaurantId) {
         return jpaReviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(restaurantId);
     }
 }

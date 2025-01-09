@@ -3,8 +3,8 @@ package com.qring.review.application.v1.service;
 import com.qring.review.application.global.exception.EntityNotFoundException;
 import com.qring.review.application.global.exception.UnauthorizedAccessException;
 import com.qring.review.application.v1.message.KafkaMessageProducerV1;
-import com.qring.review.application.v1.message.ReviewEventMessage;
-import com.qring.review.application.v1.message.ReviewStatistics;
+import com.qring.review.application.v1.message.ReviewEventMessageDTOV1;
+import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
 import com.qring.review.application.v1.res.*;
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.domain.repository.ReviewRepository;
@@ -91,11 +91,11 @@ public class ReviewServiceV1 {
         reviewRepository.save(reviewEntityForSave);
 
         // 리뷰 통계 계산
-        ReviewStatistics statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(dto.getReview().getRestaurantId());
+        ReviewStatisticsDTOV1 statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(dto.getReview().getRestaurantId());
 
         // Kafka 메시지 발행
         kafkaMessageProducerV1.publishReviewEvent(
-                ReviewEventMessage.builder()
+                ReviewEventMessageDTOV1.builder()
                         .restaurantId(dto.getReview().getRestaurantId())
                         .rating(dto.getReview().getRating())
                         .reviewCount(statistics.getReviewCount())
@@ -136,11 +136,11 @@ public class ReviewServiceV1 {
         );
 
         // 리뷰 통계 계산
-        ReviewStatistics statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(reviewEntityForModify.getRestaurantId());
+        ReviewStatisticsDTOV1 statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(reviewEntityForModify.getRestaurantId());
 
         // Kafka 메시지 발행
         kafkaMessageProducerV1.publishReviewEvent(
-                ReviewEventMessage.builder()
+                ReviewEventMessageDTOV1.builder()
                         .restaurantId(reviewEntityForModify.getRestaurantId())
                         .rating(dto.getReview().getRating())
                         .reviewCount(statistics.getReviewCount())
@@ -161,11 +161,11 @@ public class ReviewServiceV1 {
         reviewEntityForDelete.deleteReviewEntity(PassportUtil.getUsername(passport));
 
         // 리뷰 통계 계산
-        ReviewStatistics statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(reviewEntityForDelete.getRestaurantId());
+        ReviewStatisticsDTOV1 statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(reviewEntityForDelete.getRestaurantId());
 
         // Kafka 메시지 발행
         kafkaMessageProducerV1.publishReviewEvent(
-                ReviewEventMessage.builder()
+                ReviewEventMessageDTOV1.builder()
                         .restaurantId(reviewEntityForDelete.getRestaurantId())
                         .rating(0)
                         .reviewCount(statistics.getReviewCount())

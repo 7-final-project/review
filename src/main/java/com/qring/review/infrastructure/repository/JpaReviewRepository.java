@@ -1,6 +1,6 @@
 package com.qring.review.infrastructure.repository;
 
-import com.qring.review.application.v1.message.ReviewStatistics;
+import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,9 +14,9 @@ public interface JpaReviewRepository extends JpaRepository<ReviewEntity, Long> {
     Optional<ReviewEntity> findByIdAndDeletedAtIsNull(Long id);
 
     // 특정 식당의 총 리뷰 개수와 총 점수를 반환
-    @Query("SELECT new com.qring.review.application.v1.message.ReviewStatistics(COUNT(r.id), COALESCE(SUM(r.rating), 0)) " +
+    @Query("SELECT new com.qring.review.application.v1.message.ReviewStatisticsDTOV1(COUNT(r.id), COALESCE(SUM(r.rating), 0)) " +
             "FROM ReviewEntity r " +
             "WHERE r.restaurantId = :restaurantId AND r.deletedAt IS NULL")
-    ReviewStatistics findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(@Param("restaurantId") Long restaurantId);
+    ReviewStatisticsDTOV1 findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(@Param("restaurantId") Long restaurantId);
 
 }

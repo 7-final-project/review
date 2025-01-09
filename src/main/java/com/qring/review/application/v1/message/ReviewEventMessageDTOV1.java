@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewEventMessage {
+public class ReviewEventMessageDTOV1 {
     private Long restaurantId; // 식당 ID
     private int rating;        // 현재 리뷰의 평점
     private long reviewCount;  // 총 리뷰 개수
