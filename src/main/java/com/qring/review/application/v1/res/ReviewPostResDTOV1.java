@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class ReviewPostResDTOV1 {
 
     private Review review;
+    private ReviewInfo reviewInfo;
 
     public static ReviewPostResDTOV1 of(ReviewEntity reviewEntity) {
         return ReviewPostResDTOV1.builder()
@@ -42,4 +43,24 @@ public class ReviewPostResDTOV1 {
                     .build();
         }
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ReviewInfo {
+
+        private Long id;
+        private Long restaurantId;
+        private int rating;
+
+        public static ReviewInfo from(Long id, Long restaurantId, int rating) {
+            return ReviewInfo.builder()
+                    .id(id)
+                    .restaurantId(restaurantId)
+                    .rating(rating)
+                    .build();
+        }
+    }
+
 }

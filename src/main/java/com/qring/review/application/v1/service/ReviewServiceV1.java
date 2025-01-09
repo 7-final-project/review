@@ -2,6 +2,7 @@ package com.qring.review.application.v1.service;
 
 import com.qring.review.application.global.exception.EntityNotFoundException;
 import com.qring.review.application.global.exception.UnauthorizedAccessException;
+import com.qring.review.application.v1.message.KafkaMessageProducerV1;
 import com.qring.review.application.v1.res.*;
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.domain.repository.ReviewRepository;
@@ -20,10 +21,11 @@ import java.util.Objects;
 public class ReviewServiceV1 {
 
     private final ReviewRepository reviewRepository;
-    private final RestaurantServiceV1 ReviewServiceV1;
+    private final RestaurantServiceV1 restaurantServiceV1;
     private final ReservationServiceV1 reservationServiceV1;
+    private final KafkaMessageProducerV1 kafkaMessageProducerV1;
+
     private static final String STATUS_VISITED = "방문";
-    private static final String STATUS_EXISTS = "exists";
     private static final String ROLE_ADMIN = "관리자";
 
     @Transactional
@@ -70,7 +72,7 @@ public class ReviewServiceV1 {
         }
 
         // 식당 조회(FeignClent)
-        boolean isExist = ReviewServiceV1.getBy(dto.getReview().getRestaurantId()).getStatusCode().is2xxSuccessful();
+        boolean isExist = restaurantServiceV1.getBy(dto.getReview().getRestaurantId()).getStatusCode().is2xxSuccessful();
 
         if (!isExist) {
             throw new EntityNotFoundException("식당을 찾을 수 없습니다.");
