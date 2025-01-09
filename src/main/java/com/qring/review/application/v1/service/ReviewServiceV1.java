@@ -49,7 +49,7 @@ public class ReviewServiceV1 {
         // 더미 데이터 생성
         ReservationGetByIdResDTOV1.ReservationInfo reservationInfo = ReservationGetByIdResDTOV1.ReservationInfo.builder()
                 .userId(664440243592086250L) // 더미 유저 ID
-                .restaurantId(664468014171726585L) // 더미 식당 ID
+                .restaurantId(664879975619523130L) // 더미 식당 ID
                 .status("방문") // 더미 상태 값
                 .build();
 
@@ -70,9 +70,9 @@ public class ReviewServiceV1 {
         }
 
         // 식당 조회(FeignClent)
-        RestaurantExistsByIdResDTOV1 response = ReviewServiceV1.existsBy(dto.getReview().getRestaurantId()).getBody().getData();
+        boolean isExist = ReviewServiceV1.getBy(dto.getReview().getRestaurantId()).getStatusCode().is2xxSuccessful();
 
-        if (!Objects.equals(response.getStatus(), STATUS_EXISTS)) {
+        if (!isExist) {
             throw new EntityNotFoundException("식당을 찾을 수 없습니다.");
         }
 

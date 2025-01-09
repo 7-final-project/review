@@ -1,12 +1,11 @@
 package com.qring.review.application.v1.service;
 
 import com.qring.review.application.global.dto.ResDTO;
-import com.qring.review.application.v1.res.RestaurantExistsByIdResDTOV1;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
 public interface RestaurantServiceV1 {
 
-    ResponseEntity<ResDTO<RestaurantExistsByIdResDTOV1>> existsBy(@PathVariable Long id);
+    ResponseEntity<ResDTO<Object>> getBy(@PathVariable Long id);
 
 }
