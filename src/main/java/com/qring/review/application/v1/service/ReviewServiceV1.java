@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +30,13 @@ public class ReviewServiceV1 {
 
     private static final String STATUS_VISITED = "방문";
     private static final String ROLE_ADMIN = "관리자";
+    private static final String ROLE_OWNER = "점주";
+    private static final String ROLE_CUSTOMER = "고객";
 
     @Transactional
     public ReviewPostResDTOV1 postBy(String passport, PostReviewReqDTOV1 dto) {
+
+        validateUserRole(PassportUtil.getRole(passport), Set.of(ROLE_ADMIN, ROLE_CUSTOMER));
         /*
          -----
          TODO : FeignClent 로직 구현
@@ -44,40 +49,30 @@ public class ReviewServiceV1 {
          -----
         */
         // 예약 조회(FeignClient)
-//        ReservationGetByIdResDTOV1.ReservationInfo reservationInfo =
-//                reservationServiceV1
-//                .getByReview(dto.getReview().getReservationId())
-//                .getBody()
-//                .getData();
-
-        // 더미 데이터 생성
-        ReservationGetByIdResDTOV1.ReservationInfo reservationInfo = ReservationGetByIdResDTOV1.ReservationInfo.builder()
-                .userId(664440243592086250L) // 더미 유저 ID
-                .restaurantId(664879975619523130L) // 더미 식당 ID
-                .status("방문") // 더미 상태 값
-                .build();
-
+        ReservationGetByIdResDTOV1 reservationInfo =
+                reservationServiceV1
+                .getBy(passport, dto.getReview().getReservationId())
+                .getBody()
+                .getData();
 
         // 예약이 없는 경우 또는 미방문 상태일 경우
-        if (reservationInfo == null || !Objects.equals(reservationInfo.getStatus(), STATUS_VISITED)) {
+        if (reservationInfo == null || !Objects.equals(reservationInfo.getReservation().getStatus(), STATUS_VISITED)) {
             throw new EntityNotFoundException("예약 정보가 없거나 방문 기록이 없습니다.");
         }
 
         // 예약된 유저와 현재 유저가 동일한지 확인
-        if (!Objects.equals(reservationInfo.getUserId(), PassportUtil.getUserId(passport))) {
+        if (!Objects.equals(reservationInfo.getReservation().getUserId(), PassportUtil.getUserId(passport))) {
             throw new UnauthorizedAccessException("로그인한 유저와 예약 정보가 일치하지 않습니다.");
         }
 
         // 예약된 식당과 현재 요청된 식당이 동일한지 확인
-        if (!Objects.equals(reservationInfo.getRestaurantId(), dto.getReview().getRestaurantId())) {
+        if (!Objects.equals(reservationInfo.getReservation().getRestaurantId(), dto.getReview().getRestaurantId())) {
             throw new UnauthorizedAccessException("예약된 식당과 요청된 식당이 일치하지 않습니다.");
         }
 
         // 식당 조회(FeignClent)
-        boolean isExist = restaurantServiceV1.getBy(dto.getReview().getRestaurantId()).getStatusCode().is2xxSuccessful();
-
-        if (!isExist) {
-            throw new EntityNotFoundException("식당을 찾을 수 없습니다.");
+        if (!restaurantServiceV1.getBy(dto.getReview().getRestaurantId()).getStatusCode().is2xxSuccessful()) {
+            throw new EntityNotFoundException("유효하지 않은 식당입니다.");
         }
 
         ReviewEntity reviewEntityForSave = ReviewEntity.createReviewEntity(
@@ -123,10 +118,14 @@ public class ReviewServiceV1 {
 
     @Transactional
     public void putBy(String passport, Long id, PutReviewReqDTOV1 dto) {
+
+        validateUserRole(PassportUtil.getRole(passport), Set.of(ROLE_ADMIN, ROLE_CUSTOMER));
+
         // 리뷰 조회
         ReviewEntity reviewEntityForModify = getReviewEntityById(id);
 
-        validateReviewOwnership(passport, reviewEntityForModify.getUserId(), "수정");
+        // 관리자가 아니면 본인이 작성한 리뷰만 수정 가능
+        validateCustomerReviewAccess(passport, reviewEntityForModify.getUserId(), "수정");
 
         // 리뷰 수정
         reviewEntityForModify.updateReviewEntity(
@@ -152,10 +151,14 @@ public class ReviewServiceV1 {
 
     @Transactional
     public void deleteBy(String passport, Long id) {
+
+        validateUserRole(PassportUtil.getRole(passport), Set.of(ROLE_ADMIN, ROLE_CUSTOMER));
+
         // 리뷰 조회
         ReviewEntity reviewEntityForDelete = getReviewEntityById(id);
 
-        validateReviewOwnership(passport, reviewEntityForDelete.getUserId(), "삭제");
+        // 관리자가 아니면 본인이 작성한 리뷰만 삭제 가능
+        validateCustomerReviewAccess(passport, reviewEntityForDelete.getUserId(), "삭제");
 
         // 리뷰 논리 삭제
         reviewEntityForDelete.deleteReviewEntity(PassportUtil.getUsername(passport));
@@ -181,12 +184,19 @@ public class ReviewServiceV1 {
     }
 
 
-    private void validateReviewOwnership(String passport, Long entityUserId, String action) {
+
+    private void validateCustomerReviewAccess(String passport, Long entityUserId, String action) {
         String role = PassportUtil.getRole(passport);
         Long userId = PassportUtil.getUserId(passport);
 
         if (!Objects.equals(role, ROLE_ADMIN) && !Objects.equals(entityUserId, userId)) {
             throw new UnauthorizedAccessException("본인이 작성한 리뷰만 " + action + "할 수 있습니다.");
+        }
+    }
+
+    private void validateUserRole(String currentRole, Set<String> requiredRoleSet) {
+        if (!requiredRoleSet.contains(currentRole)) {
+            throw new UnauthorizedAccessException("접근 권한이 없습니다");
         }
     }
 
