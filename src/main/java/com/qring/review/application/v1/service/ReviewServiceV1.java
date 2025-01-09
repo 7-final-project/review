@@ -42,7 +42,7 @@ public class ReviewServiceV1 {
         // 예약 조회(FeignClient)
 //        ReservationGetByIdResDTOV1.ReservationInfo reservationInfo =
 //                reservationServiceV1
-//                .getByReview(dto.getReview().getReservationId())
+//                .getBy(dto.getReview().getReservationId())
 //                .getBody()
 //                .getData();
 
@@ -70,10 +70,8 @@ public class ReviewServiceV1 {
         }
 
         // 식당 조회(FeignClent)
-        boolean isExist = ReviewServiceV1.getBy(dto.getReview().getRestaurantId()).getStatusCode().is2xxSuccessful();
-
-        if (!isExist) {
-            throw new EntityNotFoundException("식당을 찾을 수 없습니다.");
+        if (!ReviewServiceV1.getBy(dto.getReview().getRestaurantId()).getStatusCode().is2xxSuccessful()) {
+            throw new EntityNotFoundException("유효하지 않은 식당입니다.");
         }
 
         ReviewEntity reviewEntityForSave = ReviewEntity.createReviewEntity(
@@ -107,7 +105,7 @@ public class ReviewServiceV1 {
         // 리뷰 조회
         ReviewEntity reviewEntityForModify = getReviewEntityById(id);
 
-        validateReviewOwnership(passport, reviewEntityForModify.getUserId(), "수정");
+        validateCustomerReviewAccess(passport, reviewEntityForModify.getUserId(), "수정");
 
         // 리뷰 수정
         reviewEntityForModify.updateReviewEntity(
@@ -122,7 +120,7 @@ public class ReviewServiceV1 {
         // 리뷰 조회
         ReviewEntity reviewEntityForDelete = getReviewEntityById(id);
 
-        validateReviewOwnership(passport, reviewEntityForDelete.getUserId(), "삭제");
+        validateCustomerReviewAccess(passport, reviewEntityForDelete.getUserId(), "삭제");
 
         // 리뷰 논리 삭제
         reviewEntityForDelete.deleteReviewEntity(PassportUtil.getUsername(passport));
@@ -134,7 +132,7 @@ public class ReviewServiceV1 {
     }
 
 
-    private void validateReviewOwnership(String passport, Long entityUserId, String action) {
+    private void validateCustomerReviewAccess(String passport, Long entityUserId, String action) {
         String role = PassportUtil.getRole(passport);
         Long userId = PassportUtil.getUserId(passport);
 
