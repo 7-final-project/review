@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +24,14 @@ public class ReviewServiceV1 {
     private final RestaurantServiceV1 ReviewServiceV1;
     private final ReservationServiceV1 reservationServiceV1;
     private static final String STATUS_VISITED = "방문";
-    private static final String STATUS_EXISTS = "exists";
     private static final String ROLE_ADMIN = "관리자";
+    private static final String ROLE_OWNER = "점주";
+    private static final String ROLE_CUSTOMER = "고객";
 
     @Transactional
     public ReviewPostResDTOV1 postBy(String passport, PostReviewReqDTOV1 dto) {
+
+        validateUserRole(PassportUtil.getRole(passport), Set.of(ROLE_ADMIN, ROLE_CUSTOMER));
         /*
          -----
          TODO : FeignClent 로직 구현
@@ -102,9 +106,13 @@ public class ReviewServiceV1 {
 
     @Transactional
     public void putBy(String passport, Long id, PutReviewReqDTOV1 dto) {
+
+        validateUserRole(PassportUtil.getRole(passport), Set.of(ROLE_ADMIN, ROLE_CUSTOMER));
+
         // 리뷰 조회
         ReviewEntity reviewEntityForModify = getReviewEntityById(id);
 
+        // 관리자가 아니면 본인이 작성한 리뷰만 수정 가능
         validateCustomerReviewAccess(passport, reviewEntityForModify.getUserId(), "수정");
 
         // 리뷰 수정
@@ -117,9 +125,13 @@ public class ReviewServiceV1 {
 
     @Transactional
     public void deleteBy(String passport, Long id) {
+
+        validateUserRole(PassportUtil.getRole(passport), Set.of(ROLE_ADMIN, ROLE_CUSTOMER));
+
         // 리뷰 조회
         ReviewEntity reviewEntityForDelete = getReviewEntityById(id);
 
+        // 관리자가 아니면 본인이 작성한 리뷰만 삭제 가능
         validateCustomerReviewAccess(passport, reviewEntityForDelete.getUserId(), "삭제");
 
         // 리뷰 논리 삭제
@@ -132,12 +144,19 @@ public class ReviewServiceV1 {
     }
 
 
+
     private void validateCustomerReviewAccess(String passport, Long entityUserId, String action) {
         String role = PassportUtil.getRole(passport);
         Long userId = PassportUtil.getUserId(passport);
 
         if (!Objects.equals(role, ROLE_ADMIN) && !Objects.equals(entityUserId, userId)) {
             throw new UnauthorizedAccessException("본인이 작성한 리뷰만 " + action + "할 수 있습니다.");
+        }
+    }
+
+    private void validateUserRole(String currentRole, Set<String> requiredRoleSet) {
+        if (!requiredRoleSet.contains(currentRole)) {
+            throw new UnauthorizedAccessException("접근 권한이 없습니다");
         }
     }
 
