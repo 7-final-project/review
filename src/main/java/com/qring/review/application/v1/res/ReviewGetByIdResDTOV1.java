@@ -29,6 +29,7 @@ public class ReviewGetByIdResDTOV1 {
         private Long userId;
         private Long id;
         private Long restaurantId;
+        private Long reservationId;
         private int rating;
         private String content;
 
@@ -37,6 +38,7 @@ public class ReviewGetByIdResDTOV1 {
                     .userId(reviewEntity.getUserId())
                     .id(reviewEntity.getId())
                     .restaurantId(reviewEntity.getRestaurantId())
+                    .reservationId(reviewEntity.getReservationId())
                     .rating(reviewEntity.getRating())
                     .content(reviewEntity.getContent())
                     .build();

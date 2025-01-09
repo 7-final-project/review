@@ -31,6 +31,9 @@ public class ReviewEntity {
     @Column(name = "restaurant_Id", nullable = false)
     private Long restaurantId;
 
+    @Column(name = "reservation_Id", nullable = false)
+    private Long reservationId;
+
     @Column(name = "rating", nullable = false)
     private int rating;
 
@@ -58,19 +61,21 @@ public class ReviewEntity {
     private String deletedBy;
 
     @Builder
-    public ReviewEntity(Long userId, Long restaurantId, int rating, String content, String username) {
+    public ReviewEntity(Long userId, Long restaurantId, Long reservationId, int rating, String content, String username) {
         this.userId = userId;
         this.restaurantId = restaurantId;
+        this.reservationId = reservationId;
         this.rating = rating;
         this.content = content;
         this.createdBy = username;
         this.modifiedBy = username;
     }
 
-    public static ReviewEntity createReviewEntity(Long userId, Long restaurantId, int rating, String content, String username) {
+    public static ReviewEntity createReviewEntity(Long userId, Long restaurantId, Long reservationId, int rating, String content, String username) {
         return ReviewEntity.builder()
                 .userId(userId)
                 .restaurantId(restaurantId)
+                .reservationId(reservationId)
                 .rating(rating)
                 .content(content)
                 .username(username)

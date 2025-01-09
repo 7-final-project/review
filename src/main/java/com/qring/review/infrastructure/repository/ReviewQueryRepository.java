@@ -23,7 +23,7 @@ public class ReviewQueryRepository {
 
     // 조건에 따른 식당 검색
     public Page<ReviewEntity> findReviewPageByDeletedAtIsNullWithConditions(
-            Pageable pageable, Long userId, Long restaurantId, String sort) {
+            Pageable pageable, Long userId, Long restaurantId, Long reservationId, String sort) {
 
         // 조건에 맞는 결과 조회
         List<ReviewEntity> resultList = queryFactory
@@ -31,7 +31,8 @@ public class ReviewQueryRepository {
                 .where(
                         reviewEntity.deletedAt.isNull(),
                         userIdEq(userId),
-                        restaurantIdEq(restaurantId)
+                        restaurantIdEq(restaurantId),
+                        reservationIdEq(reservationId)
                 )
                 .orderBy(getOrderSpecifier(sort))
                 .offset(pageable.getOffset())
@@ -59,6 +60,10 @@ public class ReviewQueryRepository {
 
     private BooleanExpression restaurantIdEq(Long restaurantId) {
         return restaurantId != null ? reviewEntity.restaurantId.eq(restaurantId) : null;
+    }
+
+    private BooleanExpression reservationIdEq(Long reservationId) {
+        return reservationId != null ? reviewEntity.reservationId.eq(reservationId) : null;
     }
 
     private OrderSpecifier<?> getOrderSpecifier(String sort) {
