@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 public interface ReservationServiceV1 {
 
-    ResponseEntity<ResDTO<ReservationGetByIdResDTOV1.ReservationInfo>> getByReview(@PathVariable Long id);
+    ResponseEntity<ResDTO<ReservationGetByIdResDTOV1.ReservationInfo>> getBy(@PathVariable Long id);
 }
