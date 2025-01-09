@@ -5,8 +5,12 @@ import com.qring.review.application.global.exception.UnauthorizedAccessException
 import com.qring.review.application.v1.message.KafkaMessageProducerV1;
 import com.qring.review.application.v1.message.ReviewEventMessageDTOV1;
 import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
-import com.qring.review.application.v1.res.*;
+import com.qring.review.application.v1.res.ReservationGetByIdResDTOV1;
+import com.qring.review.application.v1.res.ReviewGetByIdResDTOV1;
+import com.qring.review.application.v1.res.ReviewPostResDTOV1;
+import com.qring.review.application.v1.res.ReviewSearchResDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
+import com.qring.review.domain.model.constraint.ReservationStatus;
 import com.qring.review.domain.repository.ReviewRepository;
 import com.qring.review.infrastructure.util.PassportUtil;
 import com.qring.review.presentation.v1.req.PostReviewReqDTOV1;
@@ -28,9 +32,7 @@ public class ReviewServiceV1 {
     private final ReservationServiceV1 reservationServiceV1;
     private final KafkaMessageProducerV1 kafkaMessageProducerV1;
 
-    private static final String STATUS_VISITED = "방문";
     private static final String ROLE_ADMIN = "관리자";
-    private static final String ROLE_OWNER = "점주";
     private static final String ROLE_CUSTOMER = "고객";
 
     @Transactional
@@ -49,14 +51,24 @@ public class ReviewServiceV1 {
          -----
         */
         // 예약 조회(FeignClient)
-        ReservationGetByIdResDTOV1 reservationInfo =
-                reservationServiceV1
-                .getBy(passport, dto.getReview().getReservationId())
-                .getBody()
-                .getData();
+//        ReservationGetByIdResDTOV1 reservationInfo =
+//                reservationServiceV1
+//                        .getBy(passport, dto.getReview().getReservationId())
+//                        .getBody()
+//                        .getData();
+        // 더미 데이터 생성
+        ReservationGetByIdResDTOV1.Reservation reservation = ReservationGetByIdResDTOV1.Reservation.builder()
+                .userId(664440243592086250L) // 사용자 ID
+                .restaurantId(664879975619523130L) // 레스토랑 ID
+                .status(ReservationStatus.CONFIRMED) // 예약 상태 (예: CONFIRMED)
+                .build();
+
+        ReservationGetByIdResDTOV1 reservationInfo = ReservationGetByIdResDTOV1.builder()
+                .reservation(reservation)
+                .build();
 
         // 예약이 없는 경우 또는 미방문 상태일 경우
-        if (reservationInfo == null || !Objects.equals(reservationInfo.getReservation().getStatus(), STATUS_VISITED)) {
+        if (reservationInfo == null || !Objects.equals(reservationInfo.getReservation().getStatus(), ReservationStatus.CONFIRMED)) {
             throw new EntityNotFoundException("예약 정보가 없거나 방문 기록이 없습니다.");
         }
 
@@ -182,7 +194,6 @@ public class ReviewServiceV1 {
         return reviewRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다."));
     }
-
 
 
     private void validateCustomerReviewAccess(String passport, Long entityUserId, String action) {

@@ -17,6 +17,8 @@ public class ReservationGetByIdResDTOV1 {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class Reservation {
 
         private Long userId;
