@@ -7,10 +7,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "reservation-service")
 public interface ReservationClient extends ReservationServiceV1 {
 
     @GetMapping("/v1/reservations/{id}/review")
-    ResponseEntity<ResDTO<ReservationGetByIdResDTOV1.ReservationInfo>> getBy(@PathVariable("id") Long id);
+    ResponseEntity<ResDTO<ReservationGetByIdResDTOV1.ReservationInfo>> getBy(@RequestHeader("X-Passport-Token") String passport, @PathVariable("id") Long id);
 }

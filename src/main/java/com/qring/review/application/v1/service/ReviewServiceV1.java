@@ -42,11 +42,11 @@ public class ReviewServiceV1 {
         // 예약 조회(FeignClient)
 //        ReservationGetByIdResDTOV1.ReservationInfo reservationInfo =
 //                reservationServiceV1
-//                .getBy(dto.getReview().getReservationId())
+//                .getBy(passport, dto.getReview().getReservationId())
 //                .getBody()
 //                .getData();
 
-        // 더미 데이터 생성
+//        // 더미 데이터 생성
         ReservationGetByIdResDTOV1.ReservationInfo reservationInfo = ReservationGetByIdResDTOV1.ReservationInfo.builder()
                 .userId(664440243592086250L) // 더미 유저 ID
                 .restaurantId(664879975619523130L) // 더미 식당 ID

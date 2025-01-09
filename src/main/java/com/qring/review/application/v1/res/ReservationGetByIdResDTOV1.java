@@ -23,12 +23,5 @@ public class ReservationGetByIdResDTOV1 {
         private Long restaurantId;
         private String status;
 
-        public static ReservationInfo from(Long userId, Long restaurantId, String status) {
-            return ReservationInfo.builder()
-                    .userId(userId)
-                    .restaurantId(restaurantId)
-                    .status(status)
-                    .build();
-        }
     }
 }
