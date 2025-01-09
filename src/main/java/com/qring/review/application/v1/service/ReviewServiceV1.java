@@ -3,6 +3,8 @@ package com.qring.review.application.v1.service;
 import com.qring.review.application.global.exception.EntityNotFoundException;
 import com.qring.review.application.global.exception.UnauthorizedAccessException;
 import com.qring.review.application.v1.message.KafkaMessageProducerV1;
+import com.qring.review.application.v1.message.ReviewEventMessage;
+import com.qring.review.application.v1.message.ReviewStatistics;
 import com.qring.review.application.v1.res.*;
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.domain.repository.ReviewRepository;
@@ -86,9 +88,24 @@ public class ReviewServiceV1 {
                 dto.getReview().getContent(),
                 PassportUtil.getUsername(passport)
         );
+        reviewRepository.save(reviewEntityForSave);
+
+        // 리뷰 통계 계산
+        ReviewStatistics statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(dto.getReview().getRestaurantId());
+
+        // Kafka 메시지 발행
+        kafkaMessageProducerV1.publishReviewEvent(
+                ReviewEventMessage.builder()
+                        .restaurantId(dto.getReview().getRestaurantId())
+                        .rating(dto.getReview().getRating())
+                        .reviewCount(statistics.getReviewCount())
+                        .totalRating(statistics.getTotalRating())
+                        .eventType("CREATE")
+                        .build()
+        );
 
         // 저장 및 DTO 반환
-        return ReviewPostResDTOV1.of(reviewRepository.save(reviewEntityForSave));
+        return ReviewPostResDTOV1.of(reviewEntityForSave);
     }
 
     @Transactional(readOnly = true)
@@ -117,6 +134,20 @@ public class ReviewServiceV1 {
                 dto.getReview().getContent(),
                 PassportUtil.getUsername(passport)
         );
+
+        // 리뷰 통계 계산
+        ReviewStatistics statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(reviewEntityForModify.getRestaurantId());
+
+        // Kafka 메시지 발행
+        kafkaMessageProducerV1.publishReviewEvent(
+                ReviewEventMessage.builder()
+                        .restaurantId(reviewEntityForModify.getRestaurantId())
+                        .rating(dto.getReview().getRating())
+                        .reviewCount(statistics.getReviewCount())
+                        .totalRating(statistics.getTotalRating())
+                        .eventType("UPDATE")
+                        .build()
+        );
     }
 
     @Transactional
@@ -128,6 +159,20 @@ public class ReviewServiceV1 {
 
         // 리뷰 논리 삭제
         reviewEntityForDelete.deleteReviewEntity(PassportUtil.getUsername(passport));
+
+        // 리뷰 통계 계산
+        ReviewStatistics statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(reviewEntityForDelete.getRestaurantId());
+
+        // Kafka 메시지 발행
+        kafkaMessageProducerV1.publishReviewEvent(
+                ReviewEventMessage.builder()
+                        .restaurantId(reviewEntityForDelete.getRestaurantId())
+                        .rating(0)
+                        .reviewCount(statistics.getReviewCount())
+                        .totalRating(statistics.getTotalRating())
+                        .eventType("DELETE")
+                        .build()
+        );
     }
 
     private ReviewEntity getReviewEntityById(Long id) {
