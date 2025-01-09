@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface ReservationServiceV1 {
 
-    ResponseEntity<ResDTO<ReservationGetByIdResDTOV1.ReservationInfo>> getBy(@RequestHeader("X-Passport-Token") String passport, @PathVariable Long id);
+    ResponseEntity<ResDTO<ReservationGetByIdResDTOV1>> getBy(@RequestHeader("X-Passport-Token") String passport, @PathVariable Long id);
 }

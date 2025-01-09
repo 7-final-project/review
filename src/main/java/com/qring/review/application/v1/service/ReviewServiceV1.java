@@ -44,32 +44,24 @@ public class ReviewServiceV1 {
          -----
         */
         // 예약 조회(FeignClient)
-//        ReservationGetByIdResDTOV1.ReservationInfo reservationInfo =
-//                reservationServiceV1
-//                .getBy(passport, dto.getReview().getReservationId())
-//                .getBody()
-//                .getData();
-
-//        // 더미 데이터 생성
-        ReservationGetByIdResDTOV1.ReservationInfo reservationInfo = ReservationGetByIdResDTOV1.ReservationInfo.builder()
-                .userId(664440243592086250L) // 더미 유저 ID
-                .restaurantId(664879975619523130L) // 더미 식당 ID
-                .status("방문") // 더미 상태 값
-                .build();
-
+        ReservationGetByIdResDTOV1 reservationInfo =
+                reservationServiceV1
+                .getBy(passport, dto.getReview().getReservationId())
+                .getBody()
+                .getData();
 
         // 예약이 없는 경우 또는 미방문 상태일 경우
-        if (reservationInfo == null || !Objects.equals(reservationInfo.getStatus(), STATUS_VISITED)) {
+        if (reservationInfo == null || !Objects.equals(reservationInfo.getReservation().getStatus(), STATUS_VISITED)) {
             throw new EntityNotFoundException("예약 정보가 없거나 방문 기록이 없습니다.");
         }
 
         // 예약된 유저와 현재 유저가 동일한지 확인
-        if (!Objects.equals(reservationInfo.getUserId(), PassportUtil.getUserId(passport))) {
+        if (!Objects.equals(reservationInfo.getReservation().getUserId(), PassportUtil.getUserId(passport))) {
             throw new UnauthorizedAccessException("로그인한 유저와 예약 정보가 일치하지 않습니다.");
         }
 
         // 예약된 식당과 현재 요청된 식당이 동일한지 확인
-        if (!Objects.equals(reservationInfo.getRestaurantId(), dto.getReview().getRestaurantId())) {
+        if (!Objects.equals(reservationInfo.getReservation().getRestaurantId(), dto.getReview().getRestaurantId())) {
             throw new UnauthorizedAccessException("예약된 식당과 요청된 식당이 일치하지 않습니다.");
         }
 

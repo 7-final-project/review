@@ -1,5 +1,6 @@
 package com.qring.review.application.v1.res;
 
+import com.qring.review.domain.model.constraint.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,17 +12,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReservationGetByIdResDTOV1 {
 
-    private ReservationInfo reservationInfo;
+    private Reservation reservation;
+
 
     @Getter
-    @Builder
     @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ReservationInfo {
+    public static class Reservation {
 
         private Long userId;
         private Long restaurantId;
-        private String status;
+        private ReservationStatus status;
 
     }
 }

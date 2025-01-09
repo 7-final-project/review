@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "reservation-service")
 public interface ReservationClient extends ReservationServiceV1 {
 
-    @GetMapping("/v1/reservations/{id}/review")
-    ResponseEntity<ResDTO<ReservationGetByIdResDTOV1.ReservationInfo>> getBy(@RequestHeader("X-Passport-Token") String passport, @PathVariable("id") Long id);
+    @GetMapping("/v1/reservations/{id}")
+    ResponseEntity<ResDTO<ReservationGetByIdResDTOV1>> getBy(@RequestHeader("X-Passport-Token") String passport, @PathVariable("id") Long id);
 }
