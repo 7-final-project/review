@@ -67,6 +67,9 @@ public class ReviewQueryRepository {
     }
 
     private OrderSpecifier<?> getOrderSpecifier(String sort) {
+        if(sort == null || sort.isBlank()){
+            return reviewEntity.createdAt.desc(); // 기본값
+        }
         switch (sort.toLowerCase()) {
             case "high":
                 return reviewEntity.rating.desc();
