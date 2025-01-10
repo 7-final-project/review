@@ -19,7 +19,4 @@ public interface JpaReviewRepository extends JpaRepository<ReviewEntity, Long> {
             "WHERE r.restaurantId = :restaurantId AND r.deletedAt IS NULL")
     Object[] findReviewStatisticsRawByRestaurantId(@Param("restaurantId") Long restaurantId);
 
-    //JPQL의 SELECT new 구문은 런타임에 클래스를 찾아 인스턴스화해야 하므로,
-    // 자바의 클래스로더가 클래스를 정확히 찾을 수 있도록 전체 패키지 경로가 반드시 필요합니다.
-    // import 문은 컴파일 시점에만 작동하기 때문에 JPQL에서는 사용할 수 없습니다.
 }
