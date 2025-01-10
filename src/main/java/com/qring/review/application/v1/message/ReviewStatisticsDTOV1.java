@@ -1,15 +1,24 @@
 package com.qring.review.application.v1.message;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewStatisticsDTOV1 {
-    private final long reviewCount;
-    private final long totalRating;
 
-    // JPQL에서 사용할 수 있도록 public 생성자를 추가합니다.
-    public ReviewStatisticsDTOV1(long reviewCount, long totalRating) {
-        this.reviewCount = reviewCount;
-        this.totalRating = totalRating;
+    private long reviewCount;
+    private long totalRating;
+
+    // from 메서드 추가
+    public static ReviewStatisticsDTOV1 from(long reviewCount, long totalRating) {
+        return ReviewStatisticsDTOV1.builder()
+                .reviewCount(reviewCount)
+                .totalRating(totalRating)
+                .build();
     }
 }

@@ -43,6 +43,6 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         long reviewCount = Long.valueOf(result[0].toString());
         int totalRating = Integer.valueOf(result[1].toString());
 
-        return new ReviewStatisticsDTOV1(reviewCount, totalRating);
+        return ReviewStatisticsDTOV1.from(reviewCount, totalRating);
     }
 }

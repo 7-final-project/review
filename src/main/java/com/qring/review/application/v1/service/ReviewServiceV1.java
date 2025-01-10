@@ -39,45 +39,26 @@ public class ReviewServiceV1 {
     public ReviewPostResDTOV1 postBy(String passport, PostReviewReqDTOV1 dto) {
 
         validateUserRole(PassportUtil.getRole(passport), Set.of(ROLE_ADMIN, ROLE_CUSTOMER));
-        /*
-         -----
-         TODO : FeignClent 로직 구현
-        step 1. 예약 조회(FeignClent)
-                - passport에 있는 userId
-                - 예약 id -> userId, restaurantId,status 를 반환하는데
-                - 없는 예약이거나 방문전이거나 방문이 아니면 userId, restaurantId는 빈 값으로 status는 미방문으로
-                - 방문 한 예약이면 userId, restaurantId는 해당 값으로 status는 방문으로
-                - 최종 테스트  완료하면 아래 더미 데이터와 TODO 주석 제거
-         -----
-        */
+
         // 예약 조회(FeignClient)
-        ReservationGetByIdResDTOV1 reservationInfo =
+        ReservationGetByIdResDTOV1 reservation =
                 reservationServiceV1
                         .getBy(passport, dto.getReview().getReservationId())
                         .getBody()
                         .getData();
-        // 더미 데이터 생성
-//        ReservationGetByIdResDTOV1.Reservation reservation = ReservationGetByIdResDTOV1.Reservation.builder()
-//                .userId(664441014236725880L) // 사용자 ID
-//                .restaurantId(665444485672485597L) // 레스토랑 ID
-//                .status(ReservationStatus.CONFIRMED) // 예약 상태 (예: CONFIRMED)
-//                .build();
-//        ReservationGetByIdResDTOV1 reservationInfo = ReservationGetByIdResDTOV1.builder()
-//                .reservation(reservation)
-//                .build();
 
         // 예약이 없는 경우 또는 미방문 상태일 경우
-        if (reservationInfo == null || !Objects.equals(reservationInfo.getReservation().getStatus(), ReservationStatus.SEATED)) {
+        if (reservation == null || !Objects.equals(reservation.getReservation().getStatus(), ReservationStatus.SEATED)) {
             throw new EntityNotFoundException("예약 정보가 없거나 방문 기록이 없습니다.");
         }
 
         // 예약된 유저와 현재 유저가 동일한지 확인
-        if (!Objects.equals(reservationInfo.getReservation().getUserId(), PassportUtil.getUserId(passport))) {
+        if (!Objects.equals(reservation.getReservation().getUserId(), PassportUtil.getUserId(passport))) {
             throw new UnauthorizedAccessException("로그인한 유저와 예약 정보가 일치하지 않습니다.");
         }
 
         // 예약된 식당과 현재 요청된 식당이 동일한지 확인
-        if (!Objects.equals(reservationInfo.getReservation().getRestaurantId(), dto.getReview().getRestaurantId())) {
+        if (!Objects.equals(reservation.getReservation().getRestaurantId(), dto.getReview().getRestaurantId())) {
             throw new UnauthorizedAccessException("예약된 식당과 요청된 식당이 일치하지 않습니다.");
         }
 
@@ -101,13 +82,13 @@ public class ReviewServiceV1 {
 
         // Kafka 메시지 발행
         kafkaMessageProducerV1.publishReviewEvent(
-                ReviewEventMessageDTOV1.builder()
-                        .restaurantId(dto.getReview().getRestaurantId())
-                        .rating(dto.getReview().getRating())
-                        .reviewCount(statistics.getReviewCount())
-                        .totalRating(statistics.getTotalRating())
-                        .eventType("CREATE")
-                        .build()
+                ReviewEventMessageDTOV1.from(
+                        dto.getReview().getRestaurantId(),
+                        dto.getReview().getRating(),
+                        statistics.getReviewCount(),
+                        statistics.getTotalRating(),
+                        "CREATE"
+                )
         );
 
         // 저장 및 DTO 반환
