@@ -51,24 +51,23 @@ public class ReviewServiceV1 {
          -----
         */
         // 예약 조회(FeignClient)
-//        ReservationGetByIdResDTOV1 reservationInfo =
-//                reservationServiceV1
-//                        .getBy(passport, dto.getReview().getReservationId())
-//                        .getBody()
-//                        .getData();
+        ReservationGetByIdResDTOV1 reservationInfo =
+                reservationServiceV1
+                        .getBy(passport, dto.getReview().getReservationId())
+                        .getBody()
+                        .getData();
         // 더미 데이터 생성
-        ReservationGetByIdResDTOV1.Reservation reservation = ReservationGetByIdResDTOV1.Reservation.builder()
-                .userId(664440243592086250L) // 사용자 ID
-                .restaurantId(664879975619523130L) // 레스토랑 ID
-                .status(ReservationStatus.CONFIRMED) // 예약 상태 (예: CONFIRMED)
-                .build();
-
-        ReservationGetByIdResDTOV1 reservationInfo = ReservationGetByIdResDTOV1.builder()
-                .reservation(reservation)
-                .build();
+//        ReservationGetByIdResDTOV1.Reservation reservation = ReservationGetByIdResDTOV1.Reservation.builder()
+//                .userId(664441014236725880L) // 사용자 ID
+//                .restaurantId(665444485672485597L) // 레스토랑 ID
+//                .status(ReservationStatus.CONFIRMED) // 예약 상태 (예: CONFIRMED)
+//                .build();
+//        ReservationGetByIdResDTOV1 reservationInfo = ReservationGetByIdResDTOV1.builder()
+//                .reservation(reservation)
+//                .build();
 
         // 예약이 없는 경우 또는 미방문 상태일 경우
-        if (reservationInfo == null || !Objects.equals(reservationInfo.getReservation().getStatus(), ReservationStatus.CONFIRMED)) {
+        if (reservationInfo == null || !Objects.equals(reservationInfo.getReservation().getStatus(), ReservationStatus.SEATED)) {
             throw new EntityNotFoundException("예약 정보가 없거나 방문 기록이 없습니다.");
         }
 
