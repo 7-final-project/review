@@ -1,5 +1,6 @@
 package com.qring.review.domain.repository;
 
+import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,6 @@ public interface ReviewRepository {
 
     // 리뷰 저장
     ReviewEntity save(ReviewEntity categoryEntity);
+
+    ReviewStatisticsDTOV1 findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(Long restaurantId);
 }

@@ -42,4 +42,5 @@ public class ReviewPostResDTOV1 {
                     .build();
         }
     }
+
 }

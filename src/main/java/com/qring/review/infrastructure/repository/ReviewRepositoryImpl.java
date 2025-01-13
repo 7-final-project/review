@@ -1,5 +1,6 @@
 package com.qring.review.infrastructure.repository;
 
+import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,16 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     @Override
     public ReviewEntity save(ReviewEntity ReviewEntity) {
         return jpaReviewRepository.save(ReviewEntity);
+    }
+
+    @Override
+    public ReviewStatisticsDTOV1 findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(Long restaurantId) {
+        Object[] rawResult = jpaReviewRepository.findReviewStatisticsRawByRestaurantId(restaurantId);
+        Object[] result = (Object[]) rawResult[0];  // 중첩된 배열에서 실제 결과 추출하기 위해서 이렇게 사용함.
+
+        long reviewCount = Long.valueOf(result[0].toString());
+        int totalRating = Integer.valueOf(result[1].toString());
+
+        return ReviewStatisticsDTOV1.from(reviewCount, totalRating);
     }
 }
