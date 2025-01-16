@@ -85,8 +85,6 @@ public class ReviewServiceV1 {
                 ReviewEventMessageDTOV1.from(
                         dto.getReview().getRestaurantId(),
                         dto.getReview().getRating(),
-                        statistics.getReviewCount(),
-                        statistics.getTotalRating(),
                         "CREATE"
                 )
         );
@@ -134,8 +132,6 @@ public class ReviewServiceV1 {
                 ReviewEventMessageDTOV1.builder()
                         .restaurantId(reviewEntityForModify.getRestaurantId())
                         .rating(dto.getReview().getRating())
-                        .reviewCount(statistics.getReviewCount())
-                        .totalRating(statistics.getTotalRating())
                         .eventType("UPDATE")
                         .build()
         );
@@ -163,8 +159,6 @@ public class ReviewServiceV1 {
                 ReviewEventMessageDTOV1.builder()
                         .restaurantId(reviewEntityForDelete.getRestaurantId())
                         .rating(0)
-                        .reviewCount(statistics.getReviewCount())
-                        .totalRating(statistics.getTotalRating())
                         .eventType("DELETE")
                         .build()
         );
