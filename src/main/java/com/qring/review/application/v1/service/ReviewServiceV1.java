@@ -77,9 +77,6 @@ public class ReviewServiceV1 {
         );
         reviewRepository.save(reviewEntityForSave);
 
-        // 리뷰 통계 계산
-        ReviewStatisticsDTOV1 statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(dto.getReview().getRestaurantId());
-
         // Kafka 메시지 발행
         kafkaMessageProducerV1.publishReviewEvent(
                 ReviewEventMessageDTOV1.from(
@@ -117,6 +114,9 @@ public class ReviewServiceV1 {
         // 관리자가 아니면 본인이 작성한 리뷰만 수정 가능
         validateCustomerReviewAccess(passport, reviewEntityForModify.getUserId(), "수정");
 
+        // 기존 리뷰 점수
+        int previousRating = reviewEntityForModify.getRating();
+
         // 리뷰 수정
         reviewEntityForModify.updateReviewEntity(
                 dto.getReview().getRating(),
@@ -124,16 +124,13 @@ public class ReviewServiceV1 {
                 PassportUtil.getUsername(passport)
         );
 
-        // 리뷰 통계 계산
-        ReviewStatisticsDTOV1 statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(reviewEntityForModify.getRestaurantId());
-
         // Kafka 메시지 발행
         kafkaMessageProducerV1.publishReviewEvent(
-                ReviewEventMessageDTOV1.builder()
-                        .restaurantId(reviewEntityForModify.getRestaurantId())
-                        .rating(dto.getReview().getRating())
-                        .eventType("UPDATE")
-                        .build()
+                ReviewEventMessageDTOV1.from(
+                        reviewEntityForModify.getRestaurantId(),
+                        dto.getReview().getRating() - previousRating, // 점수 차이만 전달
+                        "UPDATE"
+                )
         );
     }
 
@@ -148,19 +145,19 @@ public class ReviewServiceV1 {
         // 관리자가 아니면 본인이 작성한 리뷰만 삭제 가능
         validateCustomerReviewAccess(passport, reviewEntityForDelete.getUserId(), "삭제");
 
+        // 기존 리뷰 점수
+        int deletedRating = reviewEntityForDelete.getRating();
+
         // 리뷰 논리 삭제
         reviewEntityForDelete.deleteReviewEntity(PassportUtil.getUsername(passport));
 
-        // 리뷰 통계 계산
-        ReviewStatisticsDTOV1 statistics = reviewRepository.findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(reviewEntityForDelete.getRestaurantId());
-
         // Kafka 메시지 발행
         kafkaMessageProducerV1.publishReviewEvent(
-                ReviewEventMessageDTOV1.builder()
-                        .restaurantId(reviewEntityForDelete.getRestaurantId())
-                        .rating(0)
-                        .eventType("DELETE")
-                        .build()
+                ReviewEventMessageDTOV1.from(
+                        reviewEntityForDelete.getRestaurantId(),
+                        -deletedRating, // 삭제된 리뷰 점수 전달
+                        "DELETE"
+                )
         );
     }
 
