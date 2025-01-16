@@ -155,7 +155,7 @@ public class ReviewServiceV1 {
         kafkaMessageProducerV1.publishReviewEvent(
                 ReviewEventMessageDTOV1.from(
                         reviewEntityForDelete.getRestaurantId(),
-                        -deletedRating, // 삭제된 리뷰 점수 전달
+                        deletedRating, // 삭제된 리뷰 점수 전달
                         "DELETE"
                 )
         );
