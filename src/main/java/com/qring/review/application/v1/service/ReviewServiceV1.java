@@ -4,7 +4,6 @@ import com.qring.review.application.global.exception.EntityNotFoundException;
 import com.qring.review.application.global.exception.UnauthorizedAccessException;
 import com.qring.review.application.v1.message.KafkaMessageProducerV1;
 import com.qring.review.application.v1.message.ReviewEventMessageDTOV1;
-import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
 import com.qring.review.application.v1.res.ReservationGetByIdResDTOV1;
 import com.qring.review.application.v1.res.ReviewGetByIdResDTOV1;
 import com.qring.review.application.v1.res.ReviewPostResDTOV1;
