@@ -14,7 +14,9 @@ public class KafkaMessageProducerImplV1 implements KafkaMessageProducerV1 {
 
     @Override
     public void publishReviewEvent(ReviewEventMessageDTOV1 reviewEventMessage) {
-        // 토픽, 키(식당 ID), 메시지 전달
+        // 토픽 이름: review-event-topic
+        // 메시지 키(파티션 id로 사용됨): 식당 ID
+        // 메시지: 리뷰 정보
         kafkaTemplate.send("review-event-topic", String.valueOf(reviewEventMessage.getRestaurantId()), reviewEventMessage);
     }
 }

@@ -18,5 +18,4 @@ public interface ReviewRepository {
     // 리뷰 저장
     ReviewEntity save(ReviewEntity categoryEntity);
 
-    ReviewStatisticsDTOV1 findReviewStatisticsByRestaurantIdAndDeletedAtIsNull(Long restaurantId);
 }
