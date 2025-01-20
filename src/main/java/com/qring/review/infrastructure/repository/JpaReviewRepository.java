@@ -13,4 +13,6 @@ public interface JpaReviewRepository extends JpaRepository<ReviewEntity, Long> {
     // 특정 ID로 삭제되지 않은 식당 조회
     Optional<ReviewEntity> findByIdAndDeletedAtIsNull(Long id);
 
+    // 예약 ID로 중복 리뷰 조회
+    Optional<ReviewEntity> findByReservationIdAndDeletedAtIsNull(Long id);
 }

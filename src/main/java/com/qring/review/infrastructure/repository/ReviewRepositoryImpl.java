@@ -35,4 +35,11 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         return jpaReviewRepository.save(ReviewEntity);
     }
 
+    // 예약 ID로 중복 리뷰 조회
+    @Override
+    public Optional<ReviewEntity> findByReservationIdAndDeletedAtIsNull(Long id) {
+        return jpaReviewRepository.findByReservationIdAndDeletedAtIsNull(id);
+    }
+
+
 }
