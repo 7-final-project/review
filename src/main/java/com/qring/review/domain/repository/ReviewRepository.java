@@ -18,4 +18,7 @@ public interface ReviewRepository {
     // 리뷰 저장
     ReviewEntity save(ReviewEntity categoryEntity);
 
+    // 예약 ID로 중복 리뷰 조회
+    Optional<ReviewEntity> findByReservationIdAndDeletedAtIsNull(Long id);
+
 }

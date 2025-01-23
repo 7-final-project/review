@@ -1,5 +1,6 @@
 package com.qring.review.application.v1.service;
 
+import com.qring.review.application.global.exception.DuplicateResourceException;
 import com.qring.review.application.global.exception.EntityNotFoundException;
 import com.qring.review.application.global.exception.UnauthorizedAccessException;
 import com.qring.review.application.v1.message.KafkaMessageProducerV1;
@@ -36,6 +37,11 @@ public class ReviewServiceV1 {
 
     @Transactional
     public ReviewPostResDTOV1 postBy(String passport, PostReviewReqDTOV1 dto) {
+
+        // 예약 ID로 중복 리뷰 조회
+        if (reviewRepository.findByReservationIdAndDeletedAtIsNull(dto.getReview().getReservationId()).isPresent()) {
+            throw new DuplicateResourceException("해당 예약으로 작성된 리뷰가 이미 존재합니다.");
+        }
 
         validateUserRole(PassportUtil.getRole(passport), Set.of(ROLE_ADMIN, ROLE_CUSTOMER));
 
