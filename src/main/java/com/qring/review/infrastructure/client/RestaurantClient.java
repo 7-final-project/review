@@ -1,7 +1,7 @@
 package com.qring.review.infrastructure.client;
 
 import com.qring.review.application.global.dto.ResDTO;
-import com.qring.review.application.v1.service.RestaurantServiceV1;
+import com.qring.review.application.service.RestaurantServiceV1;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

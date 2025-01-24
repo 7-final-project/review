@@ -1,8 +1,8 @@
 package com.qring.review.infrastructure.client;
 
 import com.qring.review.application.global.dto.ResDTO;
-import com.qring.review.application.v1.res.ReservationGetByIdResDTOV1;
-import com.qring.review.application.v1.service.ReservationServiceV1;
+import com.qring.review.application.res.ReservationGetByIdResDTOV1;
+import com.qring.review.application.service.ReservationServiceV1;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

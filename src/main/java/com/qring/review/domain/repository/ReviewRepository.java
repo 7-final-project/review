@@ -1,6 +1,5 @@
 package com.qring.review.domain.repository;
 
-import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,11 +1,11 @@
 package com.qring.review.infrastructure.docs;
 
 import com.qring.review.application.global.dto.ResDTO;
-import com.qring.review.application.v1.res.ReviewGetByIdResDTOV1;
-import com.qring.review.application.v1.res.ReviewPostResDTOV1;
-import com.qring.review.application.v1.res.ReviewSearchResDTOV1;
-import com.qring.review.presentation.v1.req.PostReviewReqDTOV1;
-import com.qring.review.presentation.v1.req.PutReviewReqDTOV1;
+import com.qring.review.application.res.ReviewGetByIdResDTOV1;
+import com.qring.review.application.res.ReviewPostResDTOV1;
+import com.qring.review.application.res.ReviewSearchResDTOV1;
+import com.qring.review.presentation.req.PostReviewReqDTOV1;
+import com.qring.review.presentation.req.PutReviewReqDTOV1;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
