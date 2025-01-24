@@ -1,14 +1,14 @@
-package com.qring.review.presentation.v1.controller;
+package com.qring.review.presentation.controller;
 
 
 import com.qring.review.application.global.dto.ResDTO;
-import com.qring.review.application.v1.res.ReviewGetByIdResDTOV1;
-import com.qring.review.application.v1.res.ReviewPostResDTOV1;
-import com.qring.review.application.v1.res.ReviewSearchResDTOV1;
-import com.qring.review.application.v1.service.ReviewServiceV1;
+import com.qring.review.application.res.ReviewGetByIdResDTOV1;
+import com.qring.review.application.res.ReviewPostResDTOV1;
+import com.qring.review.application.res.ReviewSearchResDTOV1;
+import com.qring.review.application.service.ReviewServiceV1;
 import com.qring.review.infrastructure.docs.ReviewControllerSwagger;
-import com.qring.review.presentation.v1.req.PostReviewReqDTOV1;
-import com.qring.review.presentation.v1.req.PutReviewReqDTOV1;
+import com.qring.review.presentation.req.PostReviewReqDTOV1;
+import com.qring.review.presentation.req.PutReviewReqDTOV1;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

@@ -1,6 +1,5 @@
 package com.qring.review.infrastructure.repository;
 
-import com.qring.review.application.v1.message.ReviewStatisticsDTOV1;
 import com.qring.review.domain.model.ReviewEntity;
 import com.qring.review.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;

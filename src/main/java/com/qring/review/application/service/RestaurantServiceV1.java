@@ -1,4 +1,4 @@
-package com.qring.review.application.v1.service;
+package com.qring.review.application.service;
 
 import com.qring.review.application.global.dto.ResDTO;
 import org.springframework.http.ResponseEntity;

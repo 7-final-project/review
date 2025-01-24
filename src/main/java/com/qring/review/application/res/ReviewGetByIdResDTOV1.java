@@ -1,4 +1,4 @@
-package com.qring.review.application.v1.res;
+package com.qring.review.application.res;
 
 import com.qring.review.domain.model.ReviewEntity;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewPostResDTOV1 {
+public class ReviewGetByIdResDTOV1 {
 
     private Review review;
 
-    public static ReviewPostResDTOV1 of(ReviewEntity reviewEntity) {
-        return ReviewPostResDTOV1.builder()
+    public static ReviewGetByIdResDTOV1 of(ReviewEntity reviewEntity) {
+        return ReviewGetByIdResDTOV1.builder()
                 .review(Review.from(reviewEntity))
                 .build();
     }
@@ -27,6 +27,7 @@ public class ReviewPostResDTOV1 {
     public static class Review {
 
         private Long userId;
+        private Long id;
         private Long restaurantId;
         private Long reservationId;
         private int rating;
@@ -35,6 +36,7 @@ public class ReviewPostResDTOV1 {
         public static Review from(ReviewEntity reviewEntity) {
             return Review.builder()
                     .userId(reviewEntity.getUserId())
+                    .id(reviewEntity.getId())
                     .restaurantId(reviewEntity.getRestaurantId())
                     .reservationId(reviewEntity.getReservationId())
                     .rating(reviewEntity.getRating())
@@ -42,5 +44,4 @@ public class ReviewPostResDTOV1 {
                     .build();
         }
     }
-
 }

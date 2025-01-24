@@ -1,4 +1,4 @@
-package com.qring.review.application.v1.message;
+package com.qring.review.application.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
